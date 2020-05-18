@@ -6,74 +6,74 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 14.6755, 14.4456 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=19]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 48, 48 )
+region = Rect2( 0, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 1 )
-region = Rect2( 48, 0, 48, 48 )
+region = Rect2( 96, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=21]
 atlas = ExtResource( 1 )
-region = Rect2( 96, 0, 48, 48 )
+region = Rect2( 192, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 1 )
-region = Rect2( 144, 0, 48, 48 )
+region = Rect2( 288, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=23]
 atlas = ExtResource( 1 )
-region = Rect2( 192, 0, 48, 48 )
+region = Rect2( 384, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=7]
+[sub_resource type="AtlasTexture" id=24]
 atlas = ExtResource( 1 )
-region = Rect2( 240, 0, 48, 48 )
+region = Rect2( 480, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=8]
+[sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 1 )
-region = Rect2( 288, 0, 48, 48 )
+region = Rect2( 576, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=9]
+[sub_resource type="AtlasTexture" id=26]
 atlas = ExtResource( 1 )
-region = Rect2( 336, 0, 48, 48 )
+region = Rect2( 672, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=27]
 atlas = ExtResource( 1 )
-region = Rect2( 384, 0, 48, 48 )
+region = Rect2( 768, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=28]
 atlas = ExtResource( 1 )
-region = Rect2( 432, 0, 48, 48 )
+region = Rect2( 864, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=29]
 atlas = ExtResource( 1 )
-region = Rect2( 480, 0, 48, 48 )
+region = Rect2( 960, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=30]
 atlas = ExtResource( 1 )
-region = Rect2( 528, 0, 48, 48 )
+region = Rect2( 1056, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=14]
+[sub_resource type="AtlasTexture" id=31]
 atlas = ExtResource( 1 )
-region = Rect2( 576, 0, 48, 48 )
+region = Rect2( 1152, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=15]
+[sub_resource type="AtlasTexture" id=32]
 atlas = ExtResource( 1 )
-region = Rect2( 624, 0, 48, 48 )
+region = Rect2( 1248, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=16]
+[sub_resource type="AtlasTexture" id=33]
 atlas = ExtResource( 1 )
-region = Rect2( 672, 0, 48, 48 )
+region = Rect2( 1344, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=17]
+[sub_resource type="AtlasTexture" id=34]
 atlas = ExtResource( 1 )
-region = Rect2( 720, 0, 48, 48 )
+region = Rect2( 1440, 0, 96, 96 )
 
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ],
-"loop": false,
+"frames": [ SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ) ],
+"loop": true,
 "name": "default",
 "speed": 16.0
 } ]
@@ -89,7 +89,6 @@ __meta__ = {
 shape = SubResource( 1 )
 
 [node name="BodySprite" type="AnimatedSprite" parent="."]
-scale = Vector2( 2, 2 )
 frames = SubResource( 18 )
 
 [node name="BulletDetector" type="Area2D" parent="."]
