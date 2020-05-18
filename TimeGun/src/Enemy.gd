@@ -1,35 +1,95 @@
 extends KinematicBody2D
 
+# @@@ ENEMY ATTRIBUTES @@@
 export var dodge_speed = 100.0
+export var move_speed  = 50.0
+export var distancing  = 150.0
+export var distancing_space = 30.0
+export var dodge_chance = 1.0 # 1 / 1000 per state process
 
+# @@@ STATE MACHINE @@@
+enum {
+	IDLE,
+	ATTACK,
+	DODGE
+}
+var state = IDLE
+var dodging = false
+
+var timer = 0.0
+
+# NODES USED
+onready var playerNode = get_tree().current_scene.find_node("Player", false, true)
+
+# ENEMY VARS
 var velocity = Vector2.ZERO
 onready var target = global_position
 
-func _process(delta: float) -> void:
-	# trigger dodge
-	if Input.is_action_just_pressed("ui_select"):
-		dodge_right()
+func _init():
+	randomize()
 
-	# set velocity towards current target
-	if (target - global_position).length() > 10.0:
-		velocity = (target - global_position).normalized() * dodge_speed
+func _physics_process(delta: float) -> void:
+	# process state
+	match state:
+		IDLE:
+			idle()
+		ATTACK:
+			attack()
+		DODGE:
+			dodge(delta)
+
+func _process(delta: float) -> void:
+	# apply velocity
+	velocity = move_and_slide(velocity)
+
+# @@@ STATE METODS @@@
+func idle():
+	# reset velocity
+	velocity = Vector2.ZERO
+	# look for player to trigger attack state
+	var space_state = get_world_2d().direct_space_state
+	var result = space_state.intersect_ray(global_position, playerNode.global_position, [self])
+	if result:
+		if result.collider == playerNode:
+			state = ATTACK
+
+func attack():
+	# go back to idle state
+	var space_state = get_world_2d().direct_space_state
+	var result = space_state.intersect_ray(global_position, playerNode.global_position, [self])
+	if result:
+		if result.collider != playerNode:
+			state = IDLE
+			return
+	
+	var difference = playerNode.global_position - global_position
+	# approach if too far away
+	if difference.length() > distancing + distancing_space:
+		velocity = (playerNode.global_position - global_position).normalized() * move_speed
+	# get away if too close
+	elif difference.length() < distancing - distancing_space:
+		velocity = -(playerNode.global_position - global_position).normalized() * move_speed
+	# dont move
 	else:
 		velocity = Vector2.ZERO
-		
-	# move drone
-	velocity = move_and_collide(velocity * delta)
 
-func dodge_right():
-	# sets animation
-	$BodySprite.play()
-	# small 'charging' cooldown
-	yield(get_tree().create_timer(0.4), "timeout")
-	# set target
-	target = global_position + Vector2(50.0, 0.0)
-	# return to idle animation
-	yield($BodySprite, "animation_finished")
-	$BodySprite.stop()
-	$BodySprite.frame = 0
+	# trigger a dodge randomly
+	if randi()%1000+1 <= dodge_chance && dodging == false:
+		state = DODGE
+
+func dodge(delta: float):
+	if !dodging:
+		timer = 1.5
+		dodging = true
+		$BodySprite.play()
+		yield(get_tree().create_timer(0.5), "timeout")
+		velocity = Vector2(dodge_speed, 0)
+	else:
+		timer = timer - delta
+		if timer <= 0:
+			dodging = false
+			state = IDLE
+			return
 
 
 # triggers when a bullet touches enemy body
@@ -37,3 +97,8 @@ func _on_BulletDetector_body_entered(body: Node) -> void:
 	# delete both
 	body.queue_free()
 	queue_free()
+
+# when dodge animation ends, reset idle animation
+func _on_BodySprite_animation_finished() -> void:
+	$BodySprite.stop()
+	$BodySprite.frame = 0
