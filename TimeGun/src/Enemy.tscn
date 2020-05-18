@@ -46,16 +46,24 @@ __meta__ = {
 "_edit_vertical_guides_": [ 45.985 ]
 }
 
+[node name="BodyShape" type="CollisionShape2D" parent="."]
+shape = SubResource( 3 )
+
 [node name="BodySprite" type="Sprite" parent="."]
 scale = Vector2( 2, 2 )
 texture = ExtResource( 1 )
 hframes = 16
 region_rect = Rect2( 0, 0, 48, 48 )
 
-[node name="BodyShape" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
 anims/dodge_right = SubResource( 2 )
 anims/idle = SubResource( 1 )
+
+[node name="BulletDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="BodyShape" type="CollisionShape2D" parent="BulletDetector"]
+shape = SubResource( 3 )
+[connection signal="body_entered" from="BulletDetector" to="." method="_on_BulletDetector_body_entered"]

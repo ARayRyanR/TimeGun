@@ -29,3 +29,10 @@ func dodge_right():
 	# return to idle animation
 	yield($AnimationPlayer, "animation_finished")
 	$AnimationPlayer.play("idle")
+
+
+# triggers when a bullet touches enemy body
+func _on_BulletDetector_body_entered(body: Node) -> void:
+	# delete both
+	body.queue_free()
+	queue_free()
