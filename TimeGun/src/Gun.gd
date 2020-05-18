@@ -1,8 +1,9 @@
 extends Sprite
 
-onready var Bullet = load("res://src/Bullet.tscn")
+export (PackedScene) var Bullet
 export var shot_speed = 500.0
 
+# creates bullet at gun position with given angle
 func shoot(shot_angle: float):
 	var bullet = Bullet.instance()
 	bullet.global_position = global_position

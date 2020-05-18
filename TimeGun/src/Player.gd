@@ -13,7 +13,7 @@ func _process(delta: float) -> void:
 	
 	velocity = move_and_slide(velocity)
 
-	# gun
+	# gun rotation
 	$GunPivot.rotation = get_angle_to(get_global_mouse_position())
 
 	# shooting
