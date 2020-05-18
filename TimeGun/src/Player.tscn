@@ -30,3 +30,6 @@ texture = ExtResource( 4 )
 
 [node name="Gun" parent="GunPivot" instance=ExtResource( 2 )]
 position = Vector2( 50, 0 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
