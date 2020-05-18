@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 export var mov_speed = 300.0
+export var angle_draft = PI/4
 
 func _process(delta: float) -> void:
 	# movement
@@ -13,8 +14,14 @@ func _process(delta: float) -> void:
 	
 	velocity = move_and_slide(velocity)
 
-	# gun rotation
-	$GunPivot.rotation = get_angle_to(get_global_mouse_position())
+	# Sprite rotation
+	var current_angle = get_angle_to(get_global_mouse_position())
+	$GunPivot.rotation = current_angle
+	$HeadSprite.rotation = current_angle
+	var min_angle = current_angle - angle_draft
+	var max_angle = current_angle + angle_draft
+	if ($Body.rotation - max_angle) > 0 || (min_angle - $Body.rotation) > 0:
+		$Body.rotation = current_angle
 
 	# shooting
 	if Input.is_action_just_pressed("shoot"):
