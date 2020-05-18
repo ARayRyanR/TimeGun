@@ -5,6 +5,10 @@ export var shot_speed = 500.0
 
 # creates bullet at gun position with given angle
 func shoot(shot_angle: float):
+	# play sound fx
+	$ShotSound.play()
+	
+	# create bullet instance
 	var bullet = Bullet.instance()
 	bullet.global_position = global_position
 	bullet.linear_velocity = Vector2(shot_speed, 0).rotated(shot_angle)
