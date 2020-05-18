@@ -21,14 +21,15 @@ func _process(delta: float) -> void:
 
 func dodge_right():
 	# sets animation
-	$AnimationPlayer.play("dodge_right")
+	$BodySprite.play()
 	# small 'charging' cooldown
-	yield(get_tree().create_timer(0.2), "timeout")
+	yield(get_tree().create_timer(0.4), "timeout")
 	# set target
 	target = global_position + Vector2(50.0, 0.0)
 	# return to idle animation
-	yield($AnimationPlayer, "animation_finished")
-	$AnimationPlayer.play("idle")
+	yield($BodySprite, "animation_finished")
+	$BodySprite.stop()
+	$BodySprite.frame = 0
 
 
 # triggers when a bullet touches enemy body
