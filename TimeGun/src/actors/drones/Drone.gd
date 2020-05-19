@@ -22,7 +22,7 @@ var dodging = false # used for dodge state
 var timer = 0.0      
 
 # NODES USED
-onready var playerNode = get_tree().current_scene.find_node("Player", false, true)
+onready var swarm = get_parent() # parent swarm node
 
 # ENEMY VARS
 var velocity = Vector2.ZERO
@@ -56,30 +56,16 @@ func death():
 func idle():
 	# reset velocity
 	velocity = Vector2.ZERO
-	# look for player to trigger attack state
-	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(global_position, playerNode.global_position, [self])
-	if result:
-		if result.collider == playerNode:
-			state = ATTACK
 
 func attack():
-	# go back to idle state
-	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(global_position, playerNode.global_position, [self])
-	if result:
-		if result.collider != playerNode:
-			state = IDLE
-			return
-	
-	# calculate current distance to player
-	var difference = playerNode.global_position - global_position
+	# calculate current distance to target
+	var difference = (target - global_position).length()
 	# approach if too far away
-	if difference.length() > distancing + distancing_space:
-		velocity = (playerNode.global_position - global_position).normalized() * move_speed
+	if difference > distancing + distancing_space:
+		velocity = (target - global_position).normalized() * move_speed
 	# get away if too close
-	elif difference.length() < distancing - distancing_space:
-		velocity = -(playerNode.global_position - global_position).normalized() * move_speed
+	elif difference < distancing - distancing_space:
+		velocity = -(target - global_position).normalized() * move_speed
 	# dont move if in threshold
 	else:
 		velocity = Vector2.ZERO
@@ -112,7 +98,7 @@ func dodge(delta: float):
 		# end dodge if timer runs out
 		if timer <= 0:
 			dodging = false
-			state = IDLE
+			state = ATTACK
 			return
 
 # @@@ UTILITY METHODS @@@

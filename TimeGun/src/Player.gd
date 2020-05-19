@@ -3,6 +3,12 @@ extends KinematicBody2D
 export var mov_speed = 300.0
 export var angle_draft = PI/4
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_released("zoom_out"):
+		$Camera2D.zoom *= 2
+	if event.is_action_released("zoom_in"):
+		$Camera2D.zoom /= 2
+
 func _process(delta: float) -> void:
 	# movement
 	var direction = Vector2(
