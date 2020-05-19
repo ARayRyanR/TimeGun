@@ -58,5 +58,5 @@ func update_health_bar():
 # triggers when something hurts the player
 func _on_HurtBox_area_entered(area: Area2D) -> void:
 	print("player damaged")
-	health -= area.get_parent().zap_damage
+	health -= area.get_parent()._player_damage
 	update_health_bar()
