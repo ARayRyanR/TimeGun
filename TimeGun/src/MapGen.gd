@@ -13,9 +13,10 @@ enum {
 	FLOOR = 0
 }
 
-func _ready() -> void:
+func gen_map() -> void:
 	randomize()
 	# generation proces
+	reset_tilemap()
 	apply_rule(0)
 	apply_rule(2)
 	apply_rule(1)
@@ -67,6 +68,14 @@ func gen_tilemap():
 func reset_tilemap():
 	if current_map:
 		current_map.queue_free()
+
+# generates random spawn point for player
+func get_spawn_point():
+	while true:
+		var x = randi()%map_width
+		var y = randi()%map_height
+		if grid[x][y] == FLOOR:
+			return current_map.global_position + Vector2(x * current_map.cell_size.x, y * current_map.cell_size.y)
 
 # takes current grid and applies a given rule to it (only one time)
 func apply_rule(rule: int):
