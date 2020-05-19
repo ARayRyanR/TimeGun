@@ -7,6 +7,9 @@ export var distancing  = 150.0     # average distance the drone will try to keep
 export var distancing_space = 30.0 # distance threshold
 export var dodge_chance = 5.0      # out of 1000 per state process (prob. of triggering a dodge)
 
+# @@@ ENEMY PROPERTIES @@@
+export var health = 100.0          # initial enemy health
+
 # @@@ STATE MACHINE @@@
 enum {
 	IDLE,
@@ -39,8 +42,15 @@ func _physics_process(delta: float) -> void:
 			dodge(delta)
 
 func _process(delta: float) -> void:
+	# check if enemy is dead
+	if health <= 0.0:
+		death()
+	
 	# apply velocity
 	velocity = move_and_slide(velocity)
+
+func death():
+	queue_free()
 
 # @@@ STATE METODS @@@
 func idle():
@@ -105,12 +115,18 @@ func dodge(delta: float):
 			state = IDLE
 			return
 
+# @@@ UTILITY METHODS @@@
+func update_health_bar():
+	$HealthBar/GreenBar.scale.x = health / 100.0
 
+# @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body
 func _on_BulletDetector_body_entered(body: Node) -> void:
-	# delete both
+	# take damage
+	health -= 10.0
+	update_health_bar()
+	# delete bullet
 	body.queue_free()
-	queue_free()
 
 # when dodge animation ends, reset idle animation
 func _on_BodySprite_animation_finished() -> void:

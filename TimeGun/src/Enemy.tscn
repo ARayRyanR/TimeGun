@@ -1,7 +1,9 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://assets/sprites/enemy.png" type="Texture" id=1]
 [ext_resource path="res://src/Enemy.gd" type="Script" id=2]
+[ext_resource path="res://assets/sprites/bar_red.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/bar_green.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 14.6755, 14.4456 )
@@ -98,6 +100,15 @@ collision_mask = 4
 [node name="BodyShape" type="CollisionShape2D" parent="BulletDetector"]
 shape = SubResource( 1 )
 
-[node name="PlayerDetector" type="RayCast2D" parent="."]
+[node name="HealthBar" type="Position2D" parent="."]
+position = Vector2( -32, -24 )
+
+[node name="RedBar" type="Sprite" parent="HealthBar"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="GreenBar" type="Sprite" parent="HealthBar"]
+texture = ExtResource( 4 )
+centered = false
 [connection signal="animation_finished" from="BodySprite" to="." method="_on_BodySprite_animation_finished"]
 [connection signal="body_entered" from="BulletDetector" to="." method="_on_BulletDetector_body_entered"]
