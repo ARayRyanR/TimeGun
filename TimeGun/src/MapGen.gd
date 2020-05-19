@@ -131,26 +131,43 @@ func rule_1():
 	# add borders just in case
 	gen_borders()
 
-# oppen horizontal path randomly
+# open horizontal path randomly
 func rule_2():
-	var height = randi()%map_height # path position
-	var size   = randi()%8          # path size
+	var path_width = randi()%8
+
+	var y_pos      = randi()%(map_height - path_width)
 	
-	for y in range(size):
+	for y in range(path_width):
 		for x in range(map_width):
-			grid[x][y + height - size] = FLOOR
+			grid[x][y_pos + y] = FLOOR
 	
 	# regen borders
 	gen_borders()
 
 # open vertical path randomly
 func rule_3():
-	var width = randi()%map_width  # path position
-	var size  = randi()%8          # path size
+	var path_width = randi()%8
+
+	var x_pos      = randi()%(map_width - path_width)
 	
-	for x in range(size):
+	for x in range(path_width):
 		for y in range(map_height):
-			grid[x + width - size][y] = FLOOR
+			grid[x_pos + x][y] = FLOOR
+	
+	# regen borders
+	gen_borders()
+
+# generate open rectangle randomly
+func rule_4():
+	var size_x = randi()%8
+	var size_y = randi()%8
+
+	var pos_x = randi()%(map_width - size_x)
+	var pos_y = randi()%(map_height - size_y)
+
+	for x in range(size_x):
+		for y in range(size_y):
+			grid[pos_x + x][pos_y + y] = FLOOR
 	
 	# regen borders
 	gen_borders()
