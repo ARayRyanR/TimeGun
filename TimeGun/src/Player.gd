@@ -23,8 +23,8 @@ func _process(delta: float) -> void:
 	if ($Body.rotation - max_angle) > 0 || (min_angle - $Body.rotation) > 0:
 		$Body.rotation = current_angle
 
-	# shooting
-	if Input.is_action_just_pressed("shoot"):
+	# shooting (pressed makes it automatic)
+	if Input.is_action_pressed("shoot"):
 		shoot()
 
 func shoot():
