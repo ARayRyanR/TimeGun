@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://assets/sprites/bar_green.png" type="Texture" id=1]
 [ext_resource path="res://assets/sprites/bar_red.png" type="Texture" id=2]
@@ -6,8 +6,8 @@
 [ext_resource path="res://src/actors/drones/Drone.gd" type="Script" id=4]
 [ext_resource path="res://assets/sprites/fly_particle.png" type="Texture" id=5]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 14.6755, 14.4456 )
+[sub_resource type="CircleShape2D" id=20]
+radius = 14.0693
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 3 )
@@ -81,22 +81,27 @@ animations = [ {
 "speed": 16.0
 } ]
 
+[sub_resource type="CircleShape2D" id=21]
+radius = 17.3632
+
 [sub_resource type="ParticlesMaterial" id=19]
 flag_disable_z = true
 gravity = Vector3( 0, 98, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 
+[sub_resource type="CircleShape2D" id=22]
+radius = 11.4274
+
 [node name="Drone" type="KinematicBody2D"]
 collision_layer = 8
-collision_mask = 9
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_vertical_guides_": [ 45.985 ]
 }
 
 [node name="BodyShape" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource( 20 )
 
 [node name="BodySprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 18 )
@@ -106,7 +111,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="BodyShape" type="CollisionShape2D" parent="BulletDetector"]
-shape = SubResource( 1 )
+shape = SubResource( 21 )
 
 [node name="HealthBar" type="Position2D" parent="."]
 position = Vector2( -32, -24 )
@@ -127,5 +132,12 @@ randomness = 0.4
 local_coords = false
 process_material = SubResource( 19 )
 texture = ExtResource( 5 )
+
+[node name="WorldDetector" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="BodyShape" type="CollisionShape2D" parent="WorldDetector"]
+shape = SubResource( 22 )
 [connection signal="animation_finished" from="BodySprite" to="." method="_on_BodySprite_animation_finished"]
 [connection signal="area_entered" from="BulletDetector" to="." method="_on_BulletDetector_area_entered"]
+[connection signal="body_entered" from="WorldDetector" to="." method="_on_WorldDetector_body_entered"]

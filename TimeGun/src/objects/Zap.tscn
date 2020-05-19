@@ -68,7 +68,7 @@ script = ExtResource( 2 )
 
 [node name="zap" type="AnimatedSprite" parent="."]
 frames = SubResource( 13 )
-frame = 1
+frame = 5
 playing = true
 offset = Vector2( 0, -1 )
 
@@ -78,4 +78,10 @@ collision_mask = 0
 
 [node name="HitShape" type="CollisionShape2D" parent="HitBox"]
 shape = SubResource( 14 )
+
+[node name="WorldDetector" type="Area2D" parent="."]
+
+[node name="HitShape2" type="CollisionShape2D" parent="WorldDetector"]
+shape = SubResource( 14 )
 [connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]
+[connection signal="body_entered" from="WorldDetector" to="." method="_on_WorldDetector_body_entered"]

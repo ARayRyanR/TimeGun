@@ -3,11 +3,12 @@ extends KinematicBody2D
 # @@@ PROJECTILE SCENE @@@
 var Zap = preload("res://src/objects/Zap.tscn")
 
+# @@@ NODES @@@
+onready var swarm = get_parent().get_parent()
+
 # @@@ ENEMY ATTRIBUTES @@@
 export var dodge_speed = 100.0     # speed at which the drone dodges
 export var move_speed  = 50.0      # regular movement speed
-export var distancing  = 150.0     # average distance the drone will try to keep
-export var distancing_space = 30.0 # distance threshold
 export var dodge_chance = 5.0      # out of 1000 per state process (prob. of triggering a dodge)
 
 # @@@ ENEMY PROPERTIES @@@
@@ -27,7 +28,7 @@ var timer = 0.0
 
 # ENEMY VARS
 var velocity = Vector2.ZERO
-onready var target = global_position
+var target
 var cooldown = 1 / fire_rate
 
 func _init():
@@ -58,21 +59,10 @@ func death():
 
 # @@@ STATE METODS @@@
 func idle():
-	# reset velocity
-	velocity = Vector2.ZERO
+	return_to_swarm()
 
 func attack():
-	# calculate current distance to target
-	var difference = (target - global_position).length()
-	# approach if too far away
-	if difference > distancing + distancing_space:
-		velocity = (target - global_position).normalized() * move_speed
-	# get away if too close
-	elif difference < distancing - distancing_space:
-		velocity = -(target - global_position).normalized() * move_speed
-	# dont move if in threshold
-	else:
-		velocity = Vector2.ZERO
+	return_to_swarm()
 	
 	# attemp to shoot
 	if cooldown <= 0.0:
@@ -111,6 +101,14 @@ func dodge(delta: float):
 			return
 
 # @@@ UTILITY METHODS @@@
+func return_to_swarm():
+	if (swarm.global_position - global_position).length() > swarm.swarm_range:
+		# return to swarm
+		velocity = (swarm.global_position - global_position).normalized() * move_speed
+	else:
+		# todo: add random movement
+		velocity = Vector2.ZERO
+
 func update_health_bar():
 	$HealthBar/GreenBar.scale.x = health / 100.0
 
@@ -137,4 +135,5 @@ func _on_BodySprite_animation_finished() -> void:
 	$BodySprite.stop()
 	$BodySprite.frame = 0
 
-
+func _on_WorldDetector_body_entered(body: Node) -> void:
+	queue_free()

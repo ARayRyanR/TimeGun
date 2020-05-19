@@ -1,12 +1,20 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/actors/drones/DroneSwarm.gd" type="Script" id=1]
 
-[node name="DroneSwarm" type="Node2D"]
+[sub_resource type="CircleShape2D" id=1]
+radius = 96.0
+
+[node name="DroneSwarm" type="KinematicBody2D"]
+collision_layer = 0
 script = ExtResource( 1 )
+swarm_speed = 200.0
+
+[node name="Drones" type="Node2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
 
 [node name="WorldDetector" type="RayCast2D" parent="."]
 enabled = true
 collide_with_areas = true
-
-[node name="Drones" type="Node2D" parent="."]
