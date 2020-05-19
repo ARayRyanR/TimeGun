@@ -1,11 +1,11 @@
 extends KinematicBody2D
 
 # @@@ ENEMY ATTRIBUTES @@@
-export var dodge_speed = 100.0
-export var move_speed  = 50.0
-export var distancing  = 150.0
-export var distancing_space = 30.0
-export var dodge_chance = 5.0 # 1 / 1000 per state process
+export var dodge_speed = 100.0     # speed at which the drone dodges
+export var move_speed  = 50.0      # regular movement speed
+export var distancing  = 150.0     # average distance the drone will try to keep
+export var distancing_space = 30.0 # distance threshold
+export var dodge_chance = 5.0      # out of 1000 per state process (prob. of triggering a dodge)
 
 # @@@ STATE MACHINE @@@
 enum {
@@ -13,10 +13,10 @@ enum {
 	ATTACK,
 	DODGE
 }
-var state = IDLE
-var dodging = false
+var state = IDLE    # holds current object state
 
-var timer = 0.0
+var dodging = false # used for dodge state
+var timer = 0.0      
 
 # NODES USED
 onready var playerNode = get_tree().current_scene.find_node("Player", false, true)
@@ -62,6 +62,7 @@ func attack():
 			state = IDLE
 			return
 	
+	# calculate current distance to player
 	var difference = playerNode.global_position - global_position
 	# approach if too far away
 	if difference.length() > distancing + distancing_space:
@@ -69,11 +70,11 @@ func attack():
 	# get away if too close
 	elif difference.length() < distancing - distancing_space:
 		velocity = -(playerNode.global_position - global_position).normalized() * move_speed
-	# dont move
+	# dont move if in threshold
 	else:
 		velocity = Vector2.ZERO
 
-	# trigger a dodge randomly
+	# trigger a dodge randomly based in prob
 	if randi()%1000+1 <= dodge_chance && dodging == false:
 		state = DODGE
 
@@ -82,7 +83,7 @@ func dodge(delta: float):
 		# if not dodging, start dodge
 		timer = 1.5
 		dodging = true
-		$BodySprite.play()
+		$BodySprite.play() # dodge animation
 		# decide random direction
 		if randi()%2 == 0:
 			# dodge right
@@ -98,6 +99,7 @@ func dodge(delta: float):
 	else:
 		# continue dodge
 		timer = timer - delta
+		# end dodge if timer runs out
 		if timer <= 0:
 			dodging = false
 			state = IDLE
