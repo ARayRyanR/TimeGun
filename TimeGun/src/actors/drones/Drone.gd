@@ -1,5 +1,8 @@
 extends KinematicBody2D
 
+# @@@ PROJECTILE SCENE @@@
+var Zap = preload("res://src/objects/Zap.tscn")
+
 # @@@ ENEMY ATTRIBUTES @@@
 export var dodge_speed = 100.0     # speed at which the drone dodges
 export var move_speed  = 50.0      # regular movement speed
@@ -9,6 +12,7 @@ export var dodge_chance = 5.0      # out of 1000 per state process (prob. of tri
 
 # @@@ ENEMY PROPERTIES @@@
 export var health = 100.0          # initial enemy health
+export var fire_rate = 0.33         # zaps / second
 
 # @@@ STATE MACHINE @@@
 enum {
@@ -21,17 +25,18 @@ var state = IDLE    # holds current object state
 var dodging = false # used for dodge state
 var timer = 0.0      
 
-# NODES USED
-onready var swarm = get_parent() # parent swarm node
-
 # ENEMY VARS
 var velocity = Vector2.ZERO
 onready var target = global_position
+var cooldown = 1 / fire_rate
 
 func _init():
 	randomize()
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
+	# decrease zappin cooldown
+	cooldown = clamp(cooldown - delta, 0.0, 1 / fire_rate)
+	
 	# process state
 	match state:
 		IDLE:
@@ -40,8 +45,7 @@ func _physics_process(delta: float) -> void:
 			attack()
 		DODGE:
 			dodge(delta)
-
-func _process(delta: float) -> void:
+	
 	# check if enemy is dead
 	if health <= 0.0:
 		death()
@@ -69,6 +73,11 @@ func attack():
 	# dont move if in threshold
 	else:
 		velocity = Vector2.ZERO
+	
+	# attemp to shoot
+	if cooldown <= 0.0:
+		var angle_to_player = get_angle_to(target)
+		shoot_zap(angle_to_player)
 
 	# trigger a dodge randomly based in prob
 	if randi()%1000+1 <= dodge_chance && dodging == false:
@@ -104,6 +113,17 @@ func dodge(delta: float):
 # @@@ UTILITY METHODS @@@
 func update_health_bar():
 	$HealthBar/GreenBar.scale.x = health / 100.0
+
+func shoot_zap(angle: float):
+	# reset cooldown
+	cooldown = 1 / fire_rate
+	
+	# create zap
+	var zap = Zap.instance()
+	zap.global_position = global_position
+	zap.linear_velocity = Vector2(zap.zap_speed, 0).rotated(angle)
+	zap.rotation = PI + randi()%6
+	get_tree().current_scene.add_child(zap)
 
 # @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body

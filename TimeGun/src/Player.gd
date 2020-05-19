@@ -1,5 +1,10 @@
 extends KinematicBody2D
 
+# @@@ PLAYER ATTRIBUTES @@@
+export var health = 100.0 # initial health
+
+# @@@ MOVEMENT VARS @@@
+var velocity = Vector2.ZERO
 export var mov_speed = 300.0
 export var angle_draft = PI/4
 
@@ -10,13 +15,12 @@ func _input(event: InputEvent) -> void:
 		$Camera2D.zoom /= 2
 
 func _process(delta: float) -> void:
-	# movement
-	var direction = Vector2(
-		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
-		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-	)
+	# death check
+	if health <= 0.0:
+		death()
 	
-	var velocity = direction.normalized() * mov_speed
+	# movement
+	movement()
 	
 	velocity = move_and_slide(velocity)
 
@@ -33,6 +37,22 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("shoot"):
 		shoot()
 
+func movement():
+	var direction = Vector2(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	)
+	
+	velocity = direction.normalized() * mov_speed
+
 func shoot():
 	var shot_angle = get_angle_to(get_global_mouse_position()) 
 	$GunPivot/Gun.shoot(shot_angle)
+
+func death():
+	queue_free()
+
+# triggers when something hurts the player
+func _on_HurtBox_area_entered(area: Area2D) -> void:
+	print("player damaged")
+	health -= area.get_parent().zap_damage
