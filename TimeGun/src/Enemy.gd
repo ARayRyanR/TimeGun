@@ -123,7 +123,7 @@ func update_health_bar():
 # triggers when a bullet touches enemy body
 func _on_BulletDetector_body_entered(body: Node) -> void:
 	# take damage
-	health -= 10.0
+	health -= body.damage
 	update_health_bar()
 	# delete bullet
 	body.queue_free()
