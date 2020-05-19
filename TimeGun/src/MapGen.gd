@@ -2,8 +2,8 @@ extends Node2D
 
 var tileset = preload("res://assets/tilesets/tileset.tres")
 
-export var map_height = 32
-export var map_width  = 32
+export var map_height = 64
+export var map_width  = 64
 
 var current_map = null
 var grid = []
@@ -26,7 +26,7 @@ func _ready() -> void:
 
 # generates random initial grid with borders
 func init_grid():
-	for x in range(map_width):
+	for _x in range(map_width):
 		gen_column()
 	
 	gen_borders()
@@ -34,7 +34,7 @@ func init_grid():
 # genereates random column
 func gen_column():
 	var col = []
-	for y in range(map_height):
+	for _y in range(map_height):
 		var bias = randi()%1000
 		if bias <= 450:
 			col.append(WALL)
@@ -55,8 +55,8 @@ func gen_borders():
 func gen_tilemap():
 	var map = TileMap.new()
 	map.tile_set = tileset
-	map.cell_size = Vector2(32, 32)
-	map.global_position = Vector2(-(map_width*32)/2, -(map_height*32)/2)
+	map.cell_size = Vector2(64, 64)
+	map.global_position = Vector2(-(map_width*64)/2, -(map_height*64)/2)
 	for x in range(map_width):
 		for y in range(map_height):
 			map.set_cell(x, y, grid[x][y])
