@@ -142,3 +142,15 @@ func rule_2():
 	
 	# regen borders
 	gen_borders()
+
+# open vertical path randomly
+func rule_3():
+	var width = randi()%map_width  # path position
+	var size  = randi()%8          # path size
+	
+	for x in range(size):
+		for y in range(map_height):
+			grid[x + width - size][y] = FLOOR
+	
+	# regen borders
+	gen_borders()
