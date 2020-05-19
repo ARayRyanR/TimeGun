@@ -32,3 +32,17 @@ There is a chance the drone will change to DODGE mode given by the dodge_chance 
 
 When the dodge mode is triggered, the drone will start a dodge in a random direction, and when the timer is over it will return to ATTACK mode.
 
+## Death
+
+When its life gets below 0, it triggers the death() method.
+TODO: add death animation (explosion / sfx / etc)
+
+## Damage
+
+To damage the drone an object should have an area on the bullet layer, and the object should have a damage member.
+
+# Drone Swarm
+
+The drone swarm can spawn drones randomly at his position.
+The drone swarm updates manually the drone states, based on current conditions.
+It looks for the player within a range, and if it has clear line of view, the drones will be set to attack mode with the player as target, otherwise the drones are set in idle mode.

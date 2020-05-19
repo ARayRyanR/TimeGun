@@ -127,14 +127,14 @@ func shoot_zap(angle: float):
 
 # @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body
-func _on_BulletDetector_body_entered(body: Node) -> void:
+func _on_BulletDetector_area_entered(area: Area2D) -> void:
 	# take damage
-	health -= body.damage
+	health -= area.get_parent().damage
 	update_health_bar()
-	# delete bullet
-	body.queue_free()
 
 # when dodge animation ends, reset idle animation
 func _on_BodySprite_animation_finished() -> void:
 	$BodySprite.stop()
 	$BodySprite.frame = 0
+
+

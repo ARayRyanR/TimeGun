@@ -128,4 +128,4 @@ local_coords = false
 process_material = SubResource( 19 )
 texture = ExtResource( 5 )
 [connection signal="animation_finished" from="BodySprite" to="." method="_on_BodySprite_animation_finished"]
-[connection signal="body_entered" from="BulletDetector" to="." method="_on_BulletDetector_body_entered"]
+[connection signal="area_entered" from="BulletDetector" to="." method="_on_BulletDetector_area_entered"]
