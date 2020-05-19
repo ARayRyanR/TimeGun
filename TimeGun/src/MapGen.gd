@@ -2,8 +2,8 @@ extends Node2D
 
 var tileset = preload("res://assets/tilesets/tileset.tres")
 
-export var map_height = 32
-export var map_width  = 32
+export var map_height = 64
+export var map_width  = 64
 
 var current_map = null
 var grid = []
@@ -55,8 +55,8 @@ func gen_borders():
 func gen_tilemap():
 	var map = TileMap.new()
 	map.tile_set = tileset
-	map.cell_size = Vector2(32, 32)
-	map.global_position = Vector2(-(map_width*32)/2, -(map_height*32)/2)
+	map.cell_size = Vector2(64, 64)
+	map.global_position = Vector2(-(map_width*64)/2, -(map_height*64)/2)
 	for x in range(map_width):
 		for y in range(map_height):
 			map.set_cell(x, y, grid[x][y])
