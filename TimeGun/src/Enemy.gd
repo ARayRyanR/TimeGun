@@ -5,7 +5,7 @@ export var dodge_speed = 100.0
 export var move_speed  = 50.0
 export var distancing  = 150.0
 export var distancing_space = 30.0
-export var dodge_chance = 1.0 # 1 / 1000 per state process
+export var dodge_chance = 5.0 # 1 / 1000 per state process
 
 # @@@ STATE MACHINE @@@
 enum {
@@ -79,12 +79,24 @@ func attack():
 
 func dodge(delta: float):
 	if !dodging:
+		# if not dodging, start dodge
 		timer = 1.5
 		dodging = true
 		$BodySprite.play()
-		yield(get_tree().create_timer(0.5), "timeout")
-		velocity = Vector2(dodge_speed, 0)
+		# decide random direction
+		if randi()%2 == 0:
+			# dodge right
+			$BodySprite.scale.x = 1
+			yield(get_tree().create_timer(0.5), "timeout")
+			velocity = Vector2(dodge_speed, 0)
+		else:
+			# dodge left
+			$BodySprite.scale.x = -1
+			yield(get_tree().create_timer(0.5), "timeout")
+			velocity = Vector2(-dodge_speed, 0)
+	
 	else:
+		# continue dodge
 		timer = timer - delta
 		if timer <= 0:
 			dodging = false
