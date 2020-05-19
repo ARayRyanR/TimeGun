@@ -52,7 +52,11 @@ func shoot():
 func death():
 	queue_free()
 
+func update_health_bar():
+	$HealthBar/GreenBar.scale.x = health / 100.0
+
 # triggers when something hurts the player
 func _on_HurtBox_area_entered(area: Area2D) -> void:
 	print("player damaged")
 	health -= area.get_parent().zap_damage
+	update_health_bar()

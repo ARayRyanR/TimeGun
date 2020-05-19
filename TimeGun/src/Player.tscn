@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/sprites/Soldier wip/BODY0.png" type="Texture" id=1]
 [ext_resource path="res://src/Gun.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Player.gd" type="Script" id=3]
 [ext_resource path="res://assets/sprites/Soldier wip/HEAD1.png" type="Texture" id=4]
+[ext_resource path="res://assets/sprites/bar_green.png" type="Texture" id=5]
+[ext_resource path="res://assets/sprites/bar_red.png" type="Texture" id=6]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 13.5915
@@ -28,6 +30,19 @@ texture = ExtResource( 4 )
 
 [node name="Gun" parent="GunPivot" instance=ExtResource( 2 )]
 position = Vector2( 50, 0 )
+
+[node name="HealthBar" type="Position2D" parent="."]
+position = Vector2( 64, -32 )
+
+[node name="RedBar" type="Sprite" parent="HealthBar"]
+position = Vector2( -94.5062, -9.33218 )
+texture = ExtResource( 6 )
+centered = false
+
+[node name="GreenBar" type="Sprite" parent="HealthBar"]
+position = Vector2( -94.5062, -9.33218 )
+texture = ExtResource( 5 )
+centered = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
