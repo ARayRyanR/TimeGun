@@ -1,7 +1,7 @@
-extends KinematicBody2D
+extends Position2D
 
 export var detection_range = 750.0
-export var swarm_speed = 200.0
+export var swarm_speed = 125.0
 export var swarm_range = 128.0
 
 var Drone = preload("res://src/actors/drones/Drone.tscn")
@@ -17,13 +17,13 @@ func _physics_process(delta: float) -> void:
 	var velocity = Vector2.ZERO
 	if $Drones.get_child_count() > 0:
 		if find_player():
-			velocity = (player.global_position - global_position).normalized() * swarm_speed
+			velocity = (player.global_position - $SwarmBody.global_position).normalized() * swarm_speed
 			drones_attack(player.global_position)
 		else:
 			velocity = Vector2.ZERO
 			drones_idle()
 		
-		velocity = move_and_slide(velocity)
+		velocity = $SwarmBody.move_and_slide(velocity)
 	else:
 		queue_free()
 
@@ -33,7 +33,7 @@ func create_drone():
 	var x_offset = 8 * (randi()%32 - 16)
 	var y_offset = 8 * (randi()%32 - 16)
 	var drone = Drone.instance()
-	drone.global_position = global_position + Vector2(x_offset, y_offset)
+	drone.global_position = $SwarmBody.global_position + Vector2(x_offset, y_offset)
 	# add drone
 	$Drones.add_child(drone)
 
@@ -41,6 +41,7 @@ func create_drone():
 func drones_attack(target: Vector2):
 	for d in $Drones.get_children():
 		if d.state != d.DODGE:
+			d.velocity = (player.global_position - $SwarmBody.global_position).normalized() * swarm_speed
 			d.state = d.ATTACK
 			d.target = target
 
@@ -48,6 +49,7 @@ func drones_attack(target: Vector2):
 func drones_idle():
 	for d in $Drones.get_children():
 		if d.state != d.DODGE:
+			d.velocity = Vector2.ZERO
 			d.state = d.IDLE
 
 # @@@ UTILITY METHODS @@@
@@ -56,13 +58,13 @@ func find_player():
 	player = get_tree().current_scene.find_node("Player", true, false)
 	if player:
 		# cast detector ray to player
-		$WorldDetector.cast_to = (player.global_position - global_position)
+		$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)
 		# check if the world is in between
-		if $WorldDetector.is_colliding():
+		if $SwarmBody/WorldDetector.is_colliding():
 			return false
 		else:
 			# check if player is within range
-			if (player.global_position - global_position).length() < detection_range:
+			if (player.global_position - $SwarmBody.global_position).length() < detection_range:
 				return true
 			else:
 				return false

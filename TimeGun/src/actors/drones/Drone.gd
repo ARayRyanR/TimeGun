@@ -8,7 +8,7 @@ onready var swarm = get_parent().get_parent()
 
 # @@@ ENEMY ATTRIBUTES @@@
 export var dodge_speed = 100.0     # speed at which the drone dodges
-export var move_speed  = 50.0      # regular movement speed
+export var move_speed  = 200.0      # regular movement speed
 export var dodge_chance = 5.0      # out of 1000 per state process (prob. of triggering a dodge)
 
 # @@@ ENEMY PROPERTIES @@@
@@ -102,12 +102,12 @@ func dodge(delta: float):
 
 # @@@ UTILITY METHODS @@@
 func return_to_swarm():
-	if (swarm.global_position - global_position).length() > swarm.swarm_range:
+	if (swarm.get_node("SwarmBody").global_position - global_position).length() > swarm.swarm_range:
 		# return to swarm
-		velocity = (swarm.global_position - global_position).normalized() * move_speed
+		velocity += (swarm.get_node("SwarmBody").global_position - global_position).normalized() * move_speed
 	else:
 		# todo: add random movement
-		velocity = Vector2.ZERO
+		velocity += Vector2.ZERO
 
 func update_health_bar():
 	$HealthBar/GreenBar.scale.x = health / 100.0
