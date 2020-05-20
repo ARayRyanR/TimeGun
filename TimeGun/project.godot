@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Rules",
+"class": "RuleSets",
+"language": "GDScript",
+"path": "res://RuleSets.gd"
+}, {
+"base": "Node2D",
+"class": "Rules",
+"language": "GDScript",
+"path": "res://src/mapgen/Rules.gd"
+} ]
 _global_script_class_icons={
-
+"RuleSets": "",
+"Rules": ""
 }
 
 [application]

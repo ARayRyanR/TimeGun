@@ -7,3 +7,5 @@
 script = ExtResource( 3 )
 
 [node name="MapGen" parent="." instance=ExtResource( 2 )]
+map_height = null
+map_width = null
