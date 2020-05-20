@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="TimeGun"
-run/main_scene="res://src/World.tscn"
+run/main_scene="res://src/world/World.tscn"
 config/icon="res://icon.png"
 
 [importer_defaults]

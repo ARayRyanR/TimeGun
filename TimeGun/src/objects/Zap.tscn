@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://assets/sprites/zap.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/drone/zap.png" type="Texture" id=1]
 [ext_resource path="res://src/objects/Zap.gd" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
@@ -68,7 +68,7 @@ script = ExtResource( 2 )
 
 [node name="zap" type="AnimatedSprite" parent="."]
 frames = SubResource( 13 )
-frame = 3
+frame = 6
 playing = true
 offset = Vector2( 0, -1 )
 

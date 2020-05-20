@@ -1,10 +1,12 @@
 [gd_scene load_steps=27 format=2]
 
-[ext_resource path="res://assets/sprites/bar_green.png" type="Texture" id=1]
-[ext_resource path="res://assets/sprites/bar_red.png" type="Texture" id=2]
-[ext_resource path="res://assets/sprites/enemy.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/health-bar/bar_green.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/health-bar/bar_red.png" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/drone/drone.png" type="Texture" id=3]
 [ext_resource path="res://src/actors/drones/Drone.gd" type="Script" id=4]
-[ext_resource path="res://assets/sprites/fly_particle.png" type="Texture" id=5]
+[ext_resource path="res://assets/sprites/particles/fly_particle.png" type="Texture" id=5]
+
+
 
 [sub_resource type="CircleShape2D" id=20]
 radius = 14.0693
