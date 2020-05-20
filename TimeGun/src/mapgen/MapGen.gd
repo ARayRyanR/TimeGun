@@ -91,7 +91,6 @@ func gen_tilemap():
 func reset_tilemap():
 	# clear all objects
 	for n in $Objects.get_children():
-		n.dead = true
 		n.queue_free()
 	# clear player
 	if $PlayerHolder.get_child_count() > 0:
@@ -239,20 +238,20 @@ func rule_swarm_room():
 	# spawn swarm
 	spawn_object_at_tile(pos_x + size_x/2, pos_y + size_y/2, "res://src/actors/drones/DroneSwarm.tscn")
 
-# creates a room for the player and spawns him
+# creates a room for the player and spawns him in, if there's is already a player, he moves him there instead
 func rule_player_room():
 	var size_x = 8 # room size
 	var size_y = 8
 
-	var pos_x = randi()%(map_width - size_x)
+	var pos_x = randi()%(map_width - size_x) # romm position in map
 	var pos_y = randi()%(map_height - size_y)
 
 	for x in range(size_x):
 		for y in range(size_y):
-			grid[pos_x + x][pos_y + y] = FLOOR
+			grid[pos_x + x][pos_y + y] = FLOOR # room tile
 	
 	# regen borders
-	gen_borders()
+	gen_borders() # just in case
 	
-	# spawn swarm
+	# spawn player
 	spawn_player_at_tile(pos_x + size_x/2, pos_y + size_y/2)

@@ -1,14 +1,17 @@
 extends Position2D
 
+# @@@ SWARM ATTRIBUTES @@@
 export var detection_range = 750.0
 export var swarm_speed = 125.0
 export var swarm_range = 64.0
 
+# @@@ DRONE OBJECT @@@
 var Drone = preload("res://src/actors/drones/Drone.tscn")
 
+# @@@ NODES @@@
+onready var map = get_tree().current_scene.get_node("MapGen")
 var player = null
 
-var dead = false
 
 func _ready() -> void:
 	# spawn 5 drones
@@ -56,22 +59,19 @@ func drones_idle():
 
 # @@@ UTILITY METHODS @@@
 func find_player():
-	if !dead:
-		# get player node
-		player = get_tree().current_scene.get_node("MapGen").current_player
-		if player:
-			# cast detector ray to player
-			$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)
-			# check if the world is in between
-			if $SwarmBody/WorldDetector.is_colliding():
-				return false
-			else:
-				# check if player is within range
-				if (player.global_position - $SwarmBody.global_position).length() < detection_range:
-					return true
-				else:
-					return false
-		else:
+	# get player node
+	player = map.current_player
+	if player:
+		# cast detector ray to player
+		$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)
+		# check if the world is in between
+		if $SwarmBody/WorldDetector.is_colliding():
 			return false
+		else:
+			# check if player is within range
+			if (player.global_position - $SwarmBody.global_position).length() < detection_range:
+				return true
+			else:
+				return false
 	else:
 		return false
