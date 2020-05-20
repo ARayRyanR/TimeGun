@@ -7,7 +7,6 @@
 [ext_resource path="res://assets/sprites/health-bar/bar_green.png" type="Texture" id=5]
 [ext_resource path="res://assets/sprites/health-bar/bar_red.png" type="Texture" id=6]
 
-
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 13.5915
 
@@ -47,6 +46,7 @@ centered = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+zoom = Vector2( 2, 2 )
 
 [node name="HurtBox" type="Area2D" parent="."]
 collision_layer = 0

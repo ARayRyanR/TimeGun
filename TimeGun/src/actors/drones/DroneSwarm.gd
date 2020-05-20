@@ -8,6 +8,8 @@ var Drone = preload("res://src/actors/drones/Drone.tscn")
 
 var player = null
 
+var dead = false
+
 func _ready() -> void:
 	# spawn 5 drones
 	for i in range(3):
@@ -30,10 +32,10 @@ func _physics_process(delta: float) -> void:
 # creates drone and adds it to the list
 func create_drone():
 	# give some randomness to initial drone positions
-	var x_offset = 8 * (randi()%32 - 16)
-	var y_offset = 8 * (randi()%32 - 16)
+	var x_offset = 8 * (randi()%16 - 8)
+	var y_offset = 8 * (randi()%16 - 8)
 	var drone = Drone.instance()
-	drone.global_position = $SwarmBody.global_position + Vector2(x_offset, y_offset)
+	drone.position += Vector2(x_offset, y_offset)
 	# add drone
 	$Drones.add_child(drone)
 
@@ -54,19 +56,22 @@ func drones_idle():
 
 # @@@ UTILITY METHODS @@@
 func find_player():
-	# get player node
-	player = get_tree().current_scene.find_node("Player", true, false)
-	if player:
-		# cast detector ray to player
-		$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)
-		# check if the world is in between
-		if $SwarmBody/WorldDetector.is_colliding():
-			return false
-		else:
-			# check if player is within range
-			if (player.global_position - $SwarmBody.global_position).length() < detection_range:
-				return true
-			else:
+	if !dead:
+		# get player node
+		player = get_tree().current_scene.get_node("MapGen").current_player
+		if player:
+			# cast detector ray to player
+			$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)
+			# check if the world is in between
+			if $SwarmBody/WorldDetector.is_colliding():
 				return false
+			else:
+				# check if player is within range
+				if (player.global_position - $SwarmBody.global_position).length() < detection_range:
+					return true
+				else:
+					return false
+		else:
+			return false
 	else:
 		return false
