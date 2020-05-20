@@ -2,7 +2,7 @@ extends Position2D
 
 export var detection_range = 750.0
 export var swarm_speed = 125.0
-export var swarm_range = 128.0
+export var swarm_range = 64.0
 
 var Drone = preload("res://src/actors/drones/Drone.tscn")
 
