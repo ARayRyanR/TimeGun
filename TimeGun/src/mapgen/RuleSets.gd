@@ -43,3 +43,15 @@ func ruleset_floor():
 	rule_ones_grid()
 	# build tilemap
 	rule_build_tilemap_from_ones()
+
+# creates the "web" overlay
+func ruleset_webs():
+	# init values
+	rule_grid_size(48*4, 48*4)
+	rule_load_tileset("res://assets/tilesets/pipe_straight.tres")
+	rule_set_tilesize(16, 16)
+	rule_center_layer()
+	# grid
+	rule_ones_grid()
+	# build
+	rule_build_tilemap_from_ones()
