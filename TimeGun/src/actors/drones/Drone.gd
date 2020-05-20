@@ -68,7 +68,7 @@ func attack():
 	# attemp to shoot
 	if cooldown <= 0.0:
 		var angle_to_player = get_angle_to(target)
-		shoot_zap(angle_to_player)
+		zap_barrage(angle_to_player)
 
 	# trigger a dodge randomly based in prob
 	if randi()%1000+1 <= dodge_chance && dodging == false:
@@ -113,18 +113,23 @@ func return_to_swarm():
 func update_health_bar():
 	$HealthBar/GreenBar.scale.x = health / 100.0
 
-func shoot_zap(angle: float):
-	# apply shoot bias
+func zap_barrage(angle: float):
 	if randi()%1000 < shoot_bias:
-		# reset cooldown
-		cooldown = 1 / fire_rate
+		cooldown = 1.0 / fire_rate
 		
-		# create zap
-		var zap = Zap.instance()
-		zap.global_position = global_position
-		zap.linear_velocity = Vector2(zap.zap_speed, 0).rotated(angle)
-		zap.rotation = PI + randi()%6
-		get_tree().current_scene.add_child(zap)
+		shoot_zap(angle)
+		yield(get_tree().create_timer(0.2), "timeout")
+		shoot_zap(angle)
+		yield(get_tree().create_timer(0.2), "timeout")
+		shoot_zap(angle)
+
+func shoot_zap(angle: float):
+	# create zap
+	var zap = Zap.instance()
+	zap.global_position = global_position
+	zap.linear_velocity = Vector2(zap.zap_speed, 0).rotated(angle)
+	zap.rotation = PI + randi()%6
+	get_tree().current_scene.add_child(zap)
 
 # @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body
