@@ -4,6 +4,9 @@ extends KinematicBody2D
 export var max_health = 100.0 # initial health
 var current_health
 
+export var fire_rate = 10 # shots per second
+var shoot_cooldown = 1 / fire_rate
+
 # @@@ MOVEMENT VARS @@@
 var velocity = Vector2.ZERO
 export var mov_speed = 300.0
@@ -14,9 +17,6 @@ func _input(event: InputEvent) -> void:
 		$Camera2D.zoom *= 2
 	if event.is_action_released("zoom_in"):
 		$Camera2D.zoom /= 2
-	# shooting (pressed makes it automatic)
-	if Input.is_action_pressed("shoot"):
-		shoot()
 
 func _init() -> void:
 	current_health = max_health
@@ -30,10 +30,17 @@ func _process(delta: float) -> void:
 	if current_health <= 0.0:
 		death()
 	
+	# decrease cooldown
+	shoot_cooldown -= delta
+	
 	# movement
 	movement()
 	
 	velocity = move_and_slide(velocity)
+	
+	# shooting (pressed makes it automatic)
+	if Input.is_action_pressed("shoot"):
+		shoot()
 
 	# Sprite rotation
 	var current_angle = get_angle_to(get_global_mouse_position())
@@ -53,8 +60,10 @@ func movement():
 	velocity = direction.normalized() * mov_speed
 
 func shoot():
-	var shot_angle = get_angle_to(get_global_mouse_position()) 
-	$GunPivot/Gun.shoot(shot_angle)
+	if shoot_cooldown <= 0.0:
+		shoot_cooldown = (1.0/fire_rate)
+		var shot_angle = get_angle_to(get_global_mouse_position()) 
+		$GunPivot/Gun.shoot(shot_angle)
 
 func death():
 	get_tree().current_scene.current_player = null

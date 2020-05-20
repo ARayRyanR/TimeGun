@@ -29,7 +29,7 @@ texture = ExtResource( 4 )
 [node name="GunPivot" type="Position2D" parent="."]
 
 [node name="Gun" parent="GunPivot" instance=ExtResource( 2 )]
-position = Vector2( 50, 0 )
+position = Vector2( 32, 0 )
 
 [node name="HealthBar" type="Position2D" parent="."]
 position = Vector2( 64, -32 )
