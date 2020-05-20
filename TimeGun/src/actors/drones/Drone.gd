@@ -13,7 +13,8 @@ export var dodge_chance = 5.0      # out of 1000 per state process (prob. of tri
 
 # @@@ ENEMY PROPERTIES @@@
 export var health = 100.0          # initial enemy health
-export var fire_rate = 0.33         # zaps / second
+export var fire_rate = 0.33        # zaps / second
+export var shoot_bias = 500        # probability of shooting
 
 # @@@ STATE MACHINE @@@
 enum {
@@ -113,15 +114,17 @@ func update_health_bar():
 	$HealthBar/GreenBar.scale.x = health / 100.0
 
 func shoot_zap(angle: float):
-	# reset cooldown
-	cooldown = 1 / fire_rate
-	
-	# create zap
-	var zap = Zap.instance()
-	zap.global_position = global_position
-	zap.linear_velocity = Vector2(zap.zap_speed, 0).rotated(angle)
-	zap.rotation = PI + randi()%6
-	get_tree().current_scene.add_child(zap)
+	# apply shoot bias
+	if randi()%1000 < shoot_bias:
+		# reset cooldown
+		cooldown = 1 / fire_rate
+		
+		# create zap
+		var zap = Zap.instance()
+		zap.global_position = global_position
+		zap.linear_velocity = Vector2(zap.zap_speed, 0).rotated(angle)
+		zap.rotation = PI + randi()%6
+		get_tree().current_scene.add_child(zap)
 
 # @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body
