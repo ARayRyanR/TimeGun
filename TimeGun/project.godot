@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "Rules",
 "class": "RuleSets",
 "language": "GDScript",
-"path": "res://RuleSets.gd"
+"path": "res://src/mapgen/RuleSets.gd"
 }, {
 "base": "Node2D",
 "class": "Rules",

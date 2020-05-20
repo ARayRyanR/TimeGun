@@ -12,6 +12,7 @@ func ruleset_world():
 	# init values
 	rule_grid_size(48, 48) # map size
 	rule_load_tileset("res://assets/tilesets/wall.tres")
+	rule_set_variations([[1, 50]]) # tile 1 has 50% prob
 	rule_set_tilesize(64, 64)
 	rule_center_layer()
 	# create grid
