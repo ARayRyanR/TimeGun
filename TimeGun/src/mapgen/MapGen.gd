@@ -9,13 +9,19 @@ var tilesize = 64
 export var map_height = 64
 export var map_width  = 64
 
+# this is used to generate a valid map
+var valid_map = false
+
 # node of current map in use
 var current_map = null
 # position at which map is generated
 var map_pos     = Vector2(-(map_width*tilesize)/2, -(map_height*tilesize)/2)
 
+# used for flood rule ONLY
+var f_map = []
 # used for the map gen, holds numbers from the next enum
 var grid = []
+
 # posible tiles for tilemap
 enum {
 	WALL = 1, # indices for tileset
@@ -33,9 +39,7 @@ func _process(delta: float) -> void:
 
 # function used for the map generation
 func gen_map() -> void:
-	randomize()
-	# generation proces
-	reset_tilemap()
+	print("generating map")
 	# after reseting we can apply as much rules as we want
 	apply_rule("reset")
 	apply_rule("horizontal")
@@ -43,9 +47,19 @@ func gen_map() -> void:
 	apply_rule("smooth")
 	apply_rule("smooth")
 	apply_rule("smooth")
+	apply_rule("smooth")
 	apply_rule("swarm_room")
 	apply_rule("player_room")
-	# once finisehd we generate the tilemap
+	apply_rule("flood")
+	apply_rule("test_area")
+
+func create_map():
+	print("creating a map")
+	randomize()
+	reset_tilemap()
+	valid_map = false
+	while !valid_map:
+		gen_map()
 	gen_tilemap()
 
 # generates random initial grid
@@ -137,6 +151,21 @@ func spawn_player_at_tile(x: int, y: int):
 		current_player.global_position = map_pos + Vector2(x * tilesize, y * tilesize) + Vector2(tilesize/2, tilesize/2)
 		current_player.visible = true
 
+# used for flood rule
+func flood_neighbours(x: int, y: int):
+	if x > 0 && grid[x-1][y] == FLOOR && f_map[x-1][y] != true:
+		f_map[x-1][y] = true
+		flood_neighbours(x-1, y)
+	if x < map_width-1 && grid[x+1][y] == FLOOR && f_map[x+1][y] != true:
+		f_map[x+1][y] = true
+		flood_neighbours(x+1, y)
+	if y > 0 && grid[x][y-1] == FLOOR && f_map[x][y-1] != true:
+		f_map[x][y-1] = true
+		flood_neighbours(x, y-1)
+	if y < map_height-1 && grid[x][y+1] == FLOOR && f_map[x][y+1] != true:
+		f_map[x][y+1] = true
+		flood_neighbours(x, y+1)
+
 # takes current grid and applies a given rule to it (only one time)
 func apply_rule(rule: String):
 	call("rule_" + rule)
@@ -219,6 +248,55 @@ func rule_rectangle():
 	
 	# regen borders
 	gen_borders()
+
+# fills every cell thats not within reach of a randomly selected cell
+func rule_flood():
+	# reset flood map
+	f_map = []
+	for x in range(map_width):
+		var col = []
+		for y in range(map_height):
+			col.append(false)
+		f_map.append(col)
+	
+	var cell_x
+	var cell_y
+	while true:
+		cell_x = randi()%map_width # randomly selected tile to flood
+		cell_y = randi()%map_height
+		if grid[cell_x][cell_y] == FLOOR:
+			break
+		
+	# this updates the whole flood map
+	f_map[cell_x][cell_y] = true # flood initial cell
+	flood_neighbours(cell_x, cell_y)
+
+	# set tiles not flooded to wall (fill them)
+	for x in range(map_width):
+		for y in range(map_height):
+			if f_map[x][y] == false:
+				grid[x][y] = WALL
+
+# tests the map for amount of space
+func rule_test_area():
+	print("testing map")
+	# count floor tiles
+	var floor_count = 0
+	for x in range(map_width):
+		for y in range(map_height):
+			if grid[x][y] == FLOOR:
+				floor_count += 1
+	
+	# calc percentage
+	var p = 100 * floor_count / (map_height*map_width)
+	
+	# test world
+	if p >= 45.0:
+		valid_map = true
+		print("valid map")
+	else:
+		print("invalid map")
+		valid_map = false
 
 # creates a room for a drone swarm and spawns it
 func rule_swarm_room():
