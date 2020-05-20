@@ -8,7 +8,7 @@ func create_map():
 	delete_layers()
 	create_layer("floor_layer", "floor")
 	create_layer("main_layer", "world")
-	create_layer("overlay", "webs")
+	#create_layer("overlay", "pipes")
 
 # creates a layer with the given name and using the rule set given
 func create_layer(name: String, ruleset: String):

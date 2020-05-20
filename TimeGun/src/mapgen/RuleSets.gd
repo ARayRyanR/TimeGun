@@ -14,7 +14,6 @@ func ruleset_world():
 	rule_load_tileset("res://assets/tilesets/wall.tres")
 	rule_set_variations([[1, 50]]) # tile 1 has 50% prob
 	rule_set_tilesize(64, 64)
-	rule_center_layer()
 	# create grid
 	rule_zero_grid()       # init zero grid
 	rule_random_ones(450)     # initial wall gen
@@ -38,20 +37,18 @@ func ruleset_floor():
 	rule_grid_size(48, 48) # map size
 	rule_load_tileset("res://assets/tilesets/grass.tres")
 	rule_set_tilesize(64, 64)
-	rule_center_layer()
+	
 	 # create grid
 	rule_ones_grid()
 	# build tilemap
 	rule_build_tilemap_from_ones()
 
-# creates the "web" overlay
-func ruleset_webs():
-	# init values
-	rule_grid_size(48*4, 48*4)
-	rule_load_tileset("res://assets/tilesets/pipe_straight.tres")
-	rule_set_tilesize(16, 16)
-	rule_center_layer()
-	# grid
-	rule_ones_grid()
-	# build
-	rule_build_tilemap_from_ones()
+func ruleset_pipes():
+	# init
+	rule_grid_size(48, 48) # map size
+	rule_set_tilesize(64, 64)
+	
+	rule_zero_grid()
+	rule_random_ones(5) # chance of pipe prefab spawning
+	
+	rule_build_objects_from_ones("res://src/objects/pipes/Pipes.tscn")

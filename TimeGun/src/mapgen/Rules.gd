@@ -102,10 +102,6 @@ func rule_border_ones():
 		self.layer_grid[0][y] = 1
 		self.layer_grid[gridx-1][y] = 1
 
-# simply sets the bias aux var
-func rule_set_bias(bias: int):
-	self.layer_bias = bias
-
 # uses bias to generate random 1's in grid (more bias = more 1's)
 func rule_random_ones(bias: int):
 	# loop through grid
@@ -176,6 +172,7 @@ func rule_flood_ones():
 				# unflood flooded cells
 				self.layer_grid[x][y] = 0
 
+
 # @@@ POSITION RELATED RULES @@@
 # sets layer position attributes
 func rule_set_pos(posx: int, posy: int):
@@ -230,6 +227,21 @@ func rule_build_tilemap_from_ones():
 	# add map to layer
 	self.add_child(map)
 
+# spawns an instance of the given scene at every one
+func rule_build_objects_from_ones(scene: String):
+	var gridx = self.layer_gridx
+	var gridy = self.layer_gridy
+	
+	var O = load(scene)
+	
+	for x in range(gridx):
+		for y in range(gridy):
+			if self.layer_grid[x][y] == 1:
+				# create object
+				var o = O.instance()
+				o.global_position = _get_tile_position(x, y)
+				self.add_child(o)
+
 # @@@ MAP CHECKS @@@
 # ensures a given amount of area is 0's (using bias aux var)
 func rule_check_area(bias: int):
@@ -270,6 +282,8 @@ func rule_spawn_player():
 	# create player
 	var player = load("res://src/actors/player/Player.tscn").instance()
 	player.global_position = _get_tile_position(posx + sizex/2, posy + sizey/2)
+	player.get_node("Camera2D").limit_right = self.layer_posx + self.layer_gridx * self.layer_cellx
+	player.get_node("Camera2D").limit_bottom = self.layer_posy + self.layer_gridy * self.layer_celly
 	self.add_child(player)
 
 # spawns a swarm at random rect
