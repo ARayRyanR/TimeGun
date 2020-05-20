@@ -1,12 +1,17 @@
 extends Position2D
 
+# @@@ SWARM ATTRIBUTES @@@
 export var detection_range = 750.0
 export var swarm_speed = 125.0
 export var swarm_range = 64.0
 
+# @@@ DRONE OBJECT @@@
 var Drone = preload("res://src/actors/drones/Drone.tscn")
 
+# @@@ NODES @@@
+onready var map = get_tree().current_scene.get_node("MapGen")
 var player = null
+
 
 func _ready() -> void:
 	# spawn 5 drones
@@ -30,10 +35,10 @@ func _physics_process(delta: float) -> void:
 # creates drone and adds it to the list
 func create_drone():
 	# give some randomness to initial drone positions
-	var x_offset = 8 * (randi()%32 - 16)
-	var y_offset = 8 * (randi()%32 - 16)
+	var x_offset = 8 * (randi()%16 - 8)
+	var y_offset = 8 * (randi()%16 - 8)
 	var drone = Drone.instance()
-	drone.global_position = $SwarmBody.global_position + Vector2(x_offset, y_offset)
+	drone.position += Vector2(x_offset, y_offset)
 	# add drone
 	$Drones.add_child(drone)
 
@@ -55,7 +60,7 @@ func drones_idle():
 # @@@ UTILITY METHODS @@@
 func find_player():
 	# get player node
-	player = get_tree().current_scene.find_node("Player", true, false)
+	player = map.current_player
 	if player:
 		# cast detector ray to player
 		$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)
