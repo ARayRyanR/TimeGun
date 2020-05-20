@@ -1,14 +1,19 @@
 extends KinematicBody2D
 
+# @@@ PROJECTILE SCENE @@@
+var Zap = preload("res://src/objects/Zap.tscn")
+
+# @@@ NODES @@@
+onready var swarm = get_parent().get_parent()
+
 # @@@ ENEMY ATTRIBUTES @@@
 export var dodge_speed = 100.0     # speed at which the drone dodges
-export var move_speed  = 50.0      # regular movement speed
-export var distancing  = 150.0     # average distance the drone will try to keep
-export var distancing_space = 30.0 # distance threshold
+export var move_speed  = 200.0      # regular movement speed
 export var dodge_chance = 5.0      # out of 1000 per state process (prob. of triggering a dodge)
 
 # @@@ ENEMY PROPERTIES @@@
 export var health = 100.0          # initial enemy health
+export var fire_rate = 0.33         # zaps / second
 
 # @@@ STATE MACHINE @@@
 enum {
@@ -21,17 +26,18 @@ var state = IDLE    # holds current object state
 var dodging = false # used for dodge state
 var timer = 0.0      
 
-# NODES USED
-onready var playerNode = get_tree().current_scene.find_node("Player", false, true)
-
 # ENEMY VARS
 var velocity = Vector2.ZERO
-onready var target = global_position
+var target
+var cooldown = 1 / fire_rate
 
 func _init():
 	randomize()
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
+	# decrease zappin cooldown
+	cooldown = clamp(cooldown - delta, 0.0, 1 / fire_rate)
+	
 	# process state
 	match state:
 		IDLE:
@@ -40,8 +46,7 @@ func _physics_process(delta: float) -> void:
 			attack()
 		DODGE:
 			dodge(delta)
-
-func _process(delta: float) -> void:
+	
 	# check if enemy is dead
 	if health <= 0.0:
 		death()
@@ -54,35 +59,15 @@ func death():
 
 # @@@ STATE METODS @@@
 func idle():
-	# reset velocity
-	velocity = Vector2.ZERO
-	# look for player to trigger attack state
-	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(global_position, playerNode.global_position, [self])
-	if result:
-		if result.collider == playerNode:
-			state = ATTACK
+	return_to_swarm()
 
 func attack():
-	# go back to idle state
-	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(global_position, playerNode.global_position, [self])
-	if result:
-		if result.collider != playerNode:
-			state = IDLE
-			return
+	return_to_swarm()
 	
-	# calculate current distance to player
-	var difference = playerNode.global_position - global_position
-	# approach if too far away
-	if difference.length() > distancing + distancing_space:
-		velocity = (playerNode.global_position - global_position).normalized() * move_speed
-	# get away if too close
-	elif difference.length() < distancing - distancing_space:
-		velocity = -(playerNode.global_position - global_position).normalized() * move_speed
-	# dont move if in threshold
-	else:
-		velocity = Vector2.ZERO
+	# attemp to shoot
+	if cooldown <= 0.0:
+		var angle_to_player = get_angle_to(target)
+		shoot_zap(angle_to_player)
 
 	# trigger a dodge randomly based in prob
 	if randi()%1000+1 <= dodge_chance && dodging == false:
@@ -112,23 +97,43 @@ func dodge(delta: float):
 		# end dodge if timer runs out
 		if timer <= 0:
 			dodging = false
-			state = IDLE
+			state = ATTACK
 			return
 
 # @@@ UTILITY METHODS @@@
+func return_to_swarm():
+	if (swarm.get_node("SwarmBody").global_position - global_position).length() > swarm.swarm_range:
+		# return to swarm
+		velocity += (swarm.get_node("SwarmBody").global_position - global_position).normalized() * move_speed
+	else:
+		# todo: add random movement
+		velocity += Vector2.ZERO
+
 func update_health_bar():
 	$HealthBar/GreenBar.scale.x = health / 100.0
 
+func shoot_zap(angle: float):
+	# reset cooldown
+	cooldown = 1 / fire_rate
+	
+	# create zap
+	var zap = Zap.instance()
+	zap.global_position = global_position
+	zap.linear_velocity = Vector2(zap.zap_speed, 0).rotated(angle)
+	zap.rotation = PI + randi()%6
+	get_tree().current_scene.add_child(zap)
+
 # @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body
-func _on_BulletDetector_body_entered(body: Node) -> void:
+func _on_BulletDetector_area_entered(area: Area2D) -> void:
 	# take damage
-	health -= body.damage
+	health -= area.get_parent().damage
 	update_health_bar()
-	# delete bullet
-	body.queue_free()
 
 # when dodge animation ends, reset idle animation
 func _on_BodySprite_animation_finished() -> void:
 	$BodySprite.stop()
 	$BodySprite.frame = 0
+
+func _on_WorldDetector_body_entered(body: Node) -> void:
+	queue_free()

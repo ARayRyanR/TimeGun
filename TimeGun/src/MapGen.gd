@@ -1,11 +1,13 @@
 extends Node2D
 
 var tileset = preload("res://assets/tilesets/tileset.tres")
+var tilesize = 64
 
 export var map_height = 64
 export var map_width  = 64
 
 var current_map = null
+var map_pos     = Vector2(-(map_width*tilesize)/2, -(map_height*tilesize)/2)
 var grid = []
 
 enum {
@@ -23,6 +25,7 @@ func gen_map() -> void:
 	apply_rule(1)
 	apply_rule(1)
 	apply_rule(1)
+	apply_rule(5)
 	gen_tilemap()
 
 # generates random initial grid with borders
@@ -56,18 +59,20 @@ func gen_borders():
 func gen_tilemap():
 	var map = TileMap.new()
 	map.tile_set = tileset
-	map.cell_size = Vector2(64, 64)
-	map.global_position = Vector2(-(map_width*64)/2, -(map_height*64)/2)
+	map.cell_size = Vector2(tilesize, tilesize)
+	map.global_position = map_pos
 	for x in range(map_width):
 		for y in range(map_height):
 			map.set_cell(x, y, grid[x][y])
 	current_map = map
-	add_child(map)
+	$Map.add_child(map)
 
 # destroys current tilemap
 func reset_tilemap():
 	if current_map:
 		current_map.queue_free()
+	for n in $Objects.get_children():
+		n.queue_free()
 
 # generates random spawn point for player
 func get_spawn_point():
@@ -75,7 +80,7 @@ func get_spawn_point():
 		var x = randi()%map_width
 		var y = randi()%map_height
 		if grid[x][y] == FLOOR:
-			return current_map.global_position + Vector2(x * current_map.cell_size.x, y * current_map.cell_size.y)
+			return current_map.global_position + Vector2(x * tilesize, y * tilesize)
 
 # takes current grid and applies a given rule to it (only one time)
 func apply_rule(rule: int):
@@ -180,3 +185,14 @@ func rule_4():
 	
 	# regen borders
 	gen_borders()
+
+func rule_5():
+	spawn_at_tile(32, 32, "res://src/actors/drones/DroneSwarm.tscn")
+
+
+# utility func
+func spawn_at_tile(x: int, y: int, res: String):
+	var Res = load(res)
+	var o = Res.instance()
+	o.global_position = map_pos + Vector2(x * tilesize, y * tilesize) + Vector2(tilesize/2, tilesize/2)
+	$Objects.add_child(o)
