@@ -3,6 +3,9 @@ extends RigidBody2D
 export var zap_speed = 250.0
 export var _player_damage = 25.0
 
+func _ready() -> void:
+	$ZapSFX.play()
+
 func death():
 	$zap.play("death")
 	yield($zap, "animation_finished")
