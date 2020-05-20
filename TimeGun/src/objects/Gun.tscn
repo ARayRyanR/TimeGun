@@ -1,9 +1,10 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://src/Gun.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/gun.png" type="Texture" id=2]
-[ext_resource path="res://src/Bullet.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/objects/Gun.gd" type="Script" id=1]
+[ext_resource path="res://assets/sprites/soldier/gun.png" type="Texture" id=2]
+[ext_resource path="res://src/objects/Bullet.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/sfx/chirp.wav" type="AudioStream" id=4]
+
 
 [node name="Gun" type="Sprite"]
 texture = ExtResource( 2 )
