@@ -14,6 +14,10 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_released("zoom_in"):
 		$Camera2D.zoom /= 2
 
+func _ready() -> void:
+	# set this player as current player
+	get_tree().current_scene.current_player = self
+
 func _process(delta: float) -> void:
 	# death check
 	if health <= 0.0:
@@ -50,6 +54,7 @@ func shoot():
 	$GunPivot/Gun.shoot(shot_angle)
 
 func death():
+	get_tree().current_scene.current_player = null
 	queue_free()
 
 func update_health_bar():
