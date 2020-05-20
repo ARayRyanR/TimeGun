@@ -29,4 +29,5 @@ func shoot(shot_angle: float):
 		bullet.damage = base_damage
 		bullet.global_position = global_position
 		bullet.linear_velocity = Vector2(shot_speed, 0).rotated(shot_angle)
+		bullet.rotation = shot_angle
 		get_tree().current_scene.add_child(bullet)
