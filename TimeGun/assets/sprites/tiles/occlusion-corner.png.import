@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/shadow.png-bad0fe254dea5ecdb5e736f309f4565a.stex"
+path="res://.import/occlusion-corner.png-3541d6264fbde732687136a607ce51b6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/tiles/shadow.png"
-dest_files=[ "res://.import/shadow.png-bad0fe254dea5ecdb5e736f309f4565a.stex" ]
+source_file="res://assets/sprites/tiles/occlusion-corner.png"
+dest_files=[ "res://.import/occlusion-corner.png-3541d6264fbde732687136a607ce51b6.stex" ]
 
 [params]
 

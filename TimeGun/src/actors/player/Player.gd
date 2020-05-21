@@ -28,7 +28,8 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_released("zoom_out"):
 		$Camera2D.zoom += Vector2(0.5, 0.5)
 	if event.is_action_released("zoom_in"):
-		$Camera2D.zoom -= Vector2(0.5, 0.5)
+		if $Camera2D.zoom.x > 0.5:
+			$Camera2D.zoom -= Vector2(0.5, 0.5)
 
 func _process(delta: float) -> void:
 	# death check

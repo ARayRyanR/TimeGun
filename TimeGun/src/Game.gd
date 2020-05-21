@@ -40,7 +40,7 @@ var MAP_HEIGHT = 48
 
 var grass_tiles = preload("res://assets/tilesets/grass.tres")
 var wall_tiles  = preload("res://assets/tilesets/wall.tres")
-var shadow_tiles= preload("res://assets/tilesets/shadows.tres")
+var shadow_tiles= preload("res://assets/tilesets/occlusion.tres")
 var Player      = preload("res://src/actors/player/Player.tscn")
 var Swarm       = preload("res://src/actors/drones/DroneSwarm.tscn")
 
@@ -92,6 +92,6 @@ func ruleset_world():
 	$Enemies.add_child(swarm)
 	
 	# Create wall shadows
-	var shadow_maps = rule_create_shadows(shadow_tiles) # get grid of shadows
+	var shadow_maps = rule_create_occlusion(shadow_tiles) # get grid of shadows
 	for map in shadow_maps:
 		$Floor.add_child(map)
