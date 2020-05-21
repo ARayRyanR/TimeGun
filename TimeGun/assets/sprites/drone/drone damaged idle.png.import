@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/zap.png-895c07489bf1133f3a8191f984c9e942.stex"
+path="res://.import/drone damaged idle.png-d02ecbed5e24230ede45d7be8f81e7ac.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/drone/zap.png"
-dest_files=[ "res://.import/zap.png-895c07489bf1133f3a8191f984c9e942.stex" ]
+source_file="res://assets/sprites/drone/drone damaged idle.png"
+dest_files=[ "res://.import/drone damaged idle.png-d02ecbed5e24230ede45d7be8f81e7ac.stex" ]
 
 [params]
 
