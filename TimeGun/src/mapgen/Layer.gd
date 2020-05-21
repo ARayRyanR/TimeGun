@@ -221,7 +221,7 @@ func rule_smooth_corners():
 	layer_grid = copy
 
 # 'Casts' the shadow of current ones in grid (returns array of created tilemaps)
-func rule_create_shadows(tileset: Resource) -> Array:
+func rule_create_occlusion(tileset: Resource) -> Array:
 	var maps = []
 	
 	# setup tilemap
