@@ -59,7 +59,6 @@ func shoot():
 		$GunPivot/Gun.shoot(shot_angle)
 
 func death():
-	get_tree().current_scene.current_player = null
 	queue_free()
 
 func update_health_bar():
