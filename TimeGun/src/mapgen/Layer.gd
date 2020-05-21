@@ -94,7 +94,7 @@ func _get_tile(position: Vector2) -> Array:
 # @@@ RULE DEFINITIONS @@@
 # @@@ GRID RELATED RULES @@@
 # returns a random global position that has a 0 on current grid
-func rule_get_empty_position():
+func rule_get_empty_position() -> Vector2:
 	var x = 0
 	var y = 0
 	while true:
@@ -105,6 +105,18 @@ func rule_get_empty_position():
 	
 	var pos = _get_tile_position(x, y)
 	return pos
+
+# returns a random tile thas has a 0 in current grid
+func rule_get_empty_tile():
+	var x = 0
+	var y = 0
+	while true:
+		x = randi()%layer_gridx
+		y = randi()%layer_gridy
+		if layer_grid[x][y] == 0:
+			break
+	
+	return [x, y]
 
 # sets layer map size
 func rule_grid_size(x: int, y :int):
