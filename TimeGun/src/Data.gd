@@ -8,6 +8,13 @@ var player = {
 	"mov_speed":  300.0
 }
 
+var gun = {
+	# Main gun attributes
+	"shot_speed": 1000.0,
+	"base_damage": 10.0,
+	"spread": PI/32
+}
+
 var drones = {
 	# Main swarm attributes
 	"detection_range": 750.0,
