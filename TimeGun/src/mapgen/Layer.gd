@@ -365,6 +365,25 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	
 	maps.append(map7)
 	
+	# setup tilemap
+	var map8 = TileMap.new()
+	map8.tile_set = tileset
+	map8.global_position = Vector2(layer_posx, layer_posy)
+	map8.cell_size = Vector2(layer_cellx, layer_celly)
+	map8.collision_mask = layer_collisionmask
+	
+	# --- create upper right shadows
+	# loop through all 2x2 cells in grid
+	for posx in range(layer_gridx-1):
+		for posy in range(layer_gridy-1):
+			# check if cell is of type [0, 0]
+			#                          [0, 1]
+			if layer_grid[posx][posy] == 0 && layer_grid[posx+1][posy] == 0 && layer_grid[posx][posy+1] == 0 && layer_grid[posx+1][posy+1] == 1:
+				# then we cast the shadow
+				map8.set_cell(posx, posy, 1, true, true, false)
+	
+	maps.append(map8)
+	
 	# return all the created maps
 	return maps
 
