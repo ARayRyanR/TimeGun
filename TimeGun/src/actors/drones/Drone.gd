@@ -150,6 +150,23 @@ func update_condition():
 		condition = TOUCHED
 	if health < max_health * 0.4:
 		condition = DAMAGED
+	
+	if state != DODGE:
+		match condition:
+			NORMAL:
+				$BodySprite.play("idle")
+			TOUCHED:
+				$BodySprite.play("idle_touched")
+			DAMAGED	:
+				$BodySprite.play("idle_damaged")
+	if state == DODGE:
+		match condition:
+			NORMAL:
+				$BodySprite.play("dodge")
+			TOUCHED:
+				$BodySprite.play("dodge_touched")
+			DAMAGED	:
+				$BodySprite.play("dodge_damaged")
 
 # @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body
