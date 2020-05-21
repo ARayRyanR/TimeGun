@@ -1,21 +1,24 @@
 extends KinematicBody2D
 
+# @@@ VALUES LOADED FROM DATA FILE @@@
+var move_speed
+var dodge_speed
+var dodge_chance
+var fire_rate
+var shoot_bias
+var max_health
+
 # @@@ PROJECTILE SCENE @@@
 var Zap = preload("res://src/objects/Zap.tscn")
 
 # @@@ NODES @@@
 onready var swarm = get_parent().get_parent()
 
-# @@@ ENEMY ATTRIBUTES @@@
-export var dodge_speed = 100.0     # speed at which the drone dodges
-export var move_speed  = 200.0      # regular movement speed
-export var dodge_chance = 5.0      # out of 1000 per state process (prob. of triggering a dodge)
-export var fire_rate = 0.33        # zaps / second
-export var shoot_bias = 500        # probability of shooting
-export var max_health = 100.0
-
 # @@@ ENEMY PROPERTIES @@@
-var health = max_health     # initial enemy health
+var velocity = Vector2.ZERO
+var target
+var cooldown
+var health
 enum {
 	NORMAL,
 	TOUCHED,
@@ -34,13 +37,20 @@ var state = IDLE    # holds current object state
 var dodging = false # used for dodge state
 var timer = 0.0      
 
-# ENEMY VARS
-var velocity = Vector2.ZERO
-var target
-var cooldown = 1 / fire_rate
-
 func _init():
 	randomize()
+	
+	# fetch values from Data
+	move_speed = Data.drones.move_speed
+	dodge_speed = Data.drones.dodge_speed
+	dodge_chance = Data.drones.dodge_chance
+	fire_rate = Data.drones.fire_rate
+	shoot_bias = Data.drones.shoot_bias
+	max_health = Data.drones.max_health
+	
+	# init values
+	health = max_health
+	cooldown = 1.0 / fire_rate
 
 func _process(delta: float) -> void:
 	# decrease zappin cooldown
