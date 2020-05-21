@@ -92,9 +92,6 @@ func ruleset_world():
 	$Enemies.add_child(swarm)
 	
 	# Create wall shadows
-	rule_cast_shadows() # get grid of shadows
-	rule_set_variations([])
-	var shadows_map = rule_build_tilemap_from_ones(shadow_tiles)
-	shadows_map.name = "Shadows"
-	$Floor.add_child(shadows_map)
-	# create tilemap
+	var shadow_maps = rule_create_shadows(shadow_tiles) # get grid of shadows
+	for map in shadow_maps:
+		$Floor.add_child(map)
