@@ -1,17 +1,10 @@
 extends Node2D
+class_name MapGenerator
 
 var Layer = preload("res://src/mapgen/Layer.tscn")
 
-
-func create_map():
-	randomize()
-	delete_layers()
-	create_layer("floor_layer", "floor")
-	create_layer("main_layer", "world")
-	#create_layer("overlay", "pipes")
-
 # creates a layer with the given name and using the rule set given
-func create_layer(name: String, ruleset: String):
+func create_layer(name: String, ruleset: String) -> Array:
 	# create new layer
 	var layer = Layer.instance()
 	layer.name = name
@@ -20,11 +13,11 @@ func create_layer(name: String, ruleset: String):
 	# check if layer was valid
 	if layer.layer_valid:
 		# add and break
-		$Layers.add_child(layer)
-		return
+		add_child(layer)
+		return layer.layer_grid
 	else:
-		create_layer(name, ruleset)
+		return create_layer(name, ruleset)
 
 func delete_layers():
-	for n in $Layers.get_children():
+	for n in get_children():
 		n.queue_free()

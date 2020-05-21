@@ -1,8 +1,8 @@
 extends Rules
 class_name RuleSets
 
-var MAP_WIDTH  = 64
-var MAP_HEIGHT = 64
+var MAP_WIDTH  = 48
+var MAP_HEIGHT = 48
 
 # This function applies a ruleset to the calling layer
 func apply_ruleset(ruleset: String):
@@ -34,7 +34,6 @@ func ruleset_world():
 	rule_flood_ones()
 	rule_smooth_corners()
 	rule_check_area(450)
-	rule_check_player()
 	# build tilemap from grid
 	if self.layer_valid:
 		# only if layer was valid (save time)

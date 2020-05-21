@@ -75,6 +75,10 @@ func rule_grid_size(x: int, y :int):
 	self.layer_gridx = x
 	self.layer_gridy = y
 
+# sets grid to given array
+func rule_set_grid(grid: Array):
+	self.layer_grid = grid
+
 # sets grid to zeros
 func rule_zero_grid():
 	var new_grid = []
