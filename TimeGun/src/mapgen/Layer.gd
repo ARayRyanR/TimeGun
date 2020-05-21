@@ -130,9 +130,9 @@ func rule_set_grid(grid: Array):
 # sets grid to zeros
 func rule_zero_grid():
 	var new_grid = []
-	for x in range(layer_gridx):
+	for _x in range(layer_gridx):
 		var col = []
-		for y in range(layer_gridy):
+		for _y in range(layer_gridy):
 			col.append(0)
 		new_grid.append(col)
 	# return generated grid
@@ -141,9 +141,9 @@ func rule_zero_grid():
 # sets grid to ones
 func rule_ones_grid():
 	var new_grid = []
-	for x in range(layer_gridx):
+	for _x in range(layer_gridx):
 		var col = []
-		for y in range(layer_gridy):
+		for _y in range(layer_gridy):
 			col.append(1)
 		new_grid.append(col)
 	# return generated grid
@@ -221,9 +221,9 @@ func rule_smooth_corners():
 func rule_cast_shadows():
 	# create grid of zeros to store shadows
 	var shadows = []
-	for x in range(layer_gridx):
+	for _x in range(layer_gridx):
 		var col = []
-		for y in range(layer_gridy):
+		for _y in range(layer_gridy):
 			col.append(0)
 		shadows.append(col)
 	
