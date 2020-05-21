@@ -3,6 +3,6 @@ extends Node
 # @@@ DATA @@@
 var player = {
 	"max_health": 100.0,
-	"fire_rate":  5.0,
-	"mov_speed":  150.0
+	"fire_rate":  7.0,
+	"mov_speed":  3000.0
 }
