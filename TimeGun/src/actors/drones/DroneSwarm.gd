@@ -1,16 +1,20 @@
 extends Position2D
 
-# @@@ SWARM ATTRIBUTES @@@
-export var detection_range = 750.0
-export var swarm_speed = 125.0
-export var swarm_range = 64.0
-
-# @@@ DRONE OBJECT @@@
-var Drone = preload("res://src/actors/drones/Drone.tscn")
+# @@@ VALUES LOADED FROM DATA FILE @@@
+var detection_range
+var swarm_speed
+var swarm_range
+var Drone
 
 # @@@ NODES @@@
 var player = null
 
+func _init() -> void:
+	# fetch values from data file
+	detection_range = Data.drones.detection_range
+	swarm_speed = Data.drones.swarm_speed
+	swarm_range = Data.drones.swarm_range
+	Drone = Data.drones.drone
 
 func _ready() -> void:
 	# spawn 5 drones
