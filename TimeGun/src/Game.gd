@@ -2,14 +2,23 @@ extends Layer
 
 # @@@ CURRENT PLAYER NODE @@@
 var player = null
+var playing = false
 
 func _ready() -> void:
-	create_map("arena")
+	create_map("regular")
+	update_objectives()
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_select"):
-		player = null
-		create_map("arena")
+func _process(delta: float) -> void:
+	if playing:
+		update_objectives()
+		
+		if Data.objectives.enemies <= 0:
+			advance_level()
+
+func advance_level():
+	player  = null
+	playing = false
+	create_map("regular")
 
 # Creates a valid map
 func create_map(ruleset: String):
@@ -21,6 +30,7 @@ func create_map(ruleset: String):
 	_use_ruleset(ruleset)
 	# makes sure is valid
 	if layer_valid:
+		playing = true
 		return
 	# if not, reset and try again
 	else:
@@ -34,6 +44,12 @@ func _clear_map():
 
 func _use_ruleset(ruleset: String):
 	call("ruleset_" + ruleset)
+
+func update_objectives():
+	# update enemies objective
+	Data.objectives.enemies = 0
+	for enemy in $Enemies.get_children():
+		Data.objectives.enemies += 1
 
 ################################################################################
 #                    MAP RULESET
