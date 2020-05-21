@@ -32,6 +32,16 @@ var layer_tile_variations = []
 
 ################################################################################
 # @@@ UTILITY METHODS @@@
+# returns a grid of size (x, y) full of zeros
+func _gen_grid_zeros(x: int, y:int):
+	var grid = []
+	for _x in range(x):
+		var col = []
+		for _y in range(y):
+			col.append(0)
+		grid.append(col)
+	return grid
+
 # returns a list of the values of the neighbours of a cell in the grid (8 neighbours)
 func _get_8neighbours(x: int, y: int):
 	var values = []
@@ -224,6 +234,7 @@ func rule_smooth_corners():
 func rule_create_occlusion(tileset: Resource) -> Array:
 	var maps = []
 	
+	# ----- Generate straight occlusion -----
 	# setup tilemap
 	var map1 = TileMap.new()
 	map1.tile_set = tileset
@@ -232,12 +243,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map1.collision_mask = layer_collisionmask
 	
 	# create grid of zeros to store shadows
-	var shadows = []
-	for _x in range(layer_gridx):
-		var col = []
-		for _y in range(layer_gridy):
-			col.append(0)
-		shadows.append(col)
+	var shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
 	
 	# --- create bottom shadows
 	# loop through all 1x2 cells in grid
@@ -264,12 +270,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map2.collision_mask = layer_collisionmask
 	
 	# create grid of zeros to store shadows
-	shadows = []
-	for _x in range(layer_gridx):
-		var col = []
-		for _y in range(layer_gridy):
-			col.append(0)
-		shadows.append(col)
+	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
 	
 	# --- create top shadows
 	# loop through all 1x2 cells in grid
@@ -297,12 +298,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map3.collision_mask = layer_collisionmask
 	
 	# create grid of zeros to store shadows
-	shadows = []
-	for _x in range(layer_gridx):
-		var col = []
-		for _y in range(layer_gridy):
-			col.append(0)
-		shadows.append(col)
+	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
 	
 	# --- create left shadows
 	# loop through all 2x1 cells in grid
@@ -330,12 +326,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map4.collision_mask = layer_collisionmask
 	
 	# create grid of zeros to store shadows
-	shadows = []
-	for _x in range(layer_gridx):
-		var col = []
-		for _y in range(layer_gridy):
-			col.append(0)
-		shadows.append(col)
+	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
 	
 	# --- create right shadows
 	# loop through all 2x1 cells in grid
@@ -354,7 +345,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 				map4.set_cell(x, y, 0, false, false, true)
 	
 	maps.append(map4)
-	
+		
 	# add map to layer
 	return maps
 
