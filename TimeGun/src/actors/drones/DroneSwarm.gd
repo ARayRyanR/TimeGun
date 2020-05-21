@@ -9,7 +9,6 @@ export var swarm_range = 64.0
 var Drone = preload("res://src/actors/drones/Drone.tscn")
 
 # @@@ NODES @@@
-onready var map = get_tree().current_scene.get_node("MapGen")
 var player = null
 
 
@@ -60,7 +59,8 @@ func drones_idle():
 # @@@ UTILITY METHODS @@@
 func find_player():
 	# get player node
-	player = map.current_player
+	player = get_tree().current_scene.player
+	# TODO: redo player finding code!!!
 	if player:
 		# cast detector ray to player
 		$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)

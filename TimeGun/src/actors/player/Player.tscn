@@ -29,7 +29,7 @@ texture = ExtResource( 4 )
 [node name="GunPivot" type="Position2D" parent="."]
 
 [node name="Gun" parent="GunPivot" instance=ExtResource( 2 )]
-position = Vector2( 50, 0 )
+position = Vector2( 32, 0 )
 
 [node name="HealthBar" type="Position2D" parent="."]
 position = Vector2( 64, -32 )
@@ -46,7 +46,9 @@ centered = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
-zoom = Vector2( 2, 2 )
+limit_left = 0
+limit_top = 0
+smoothing_enabled = true
 
 [node name="HurtBox" type="Area2D" parent="."]
 collision_layer = 0

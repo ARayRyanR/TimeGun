@@ -10,10 +10,18 @@ onready var swarm = get_parent().get_parent()
 export var dodge_speed = 100.0     # speed at which the drone dodges
 export var move_speed  = 200.0      # regular movement speed
 export var dodge_chance = 5.0      # out of 1000 per state process (prob. of triggering a dodge)
+export var fire_rate = 0.33        # zaps / second
+export var shoot_bias = 500        # probability of shooting
+export var max_health = 100.0
 
 # @@@ ENEMY PROPERTIES @@@
-export var health = 100.0          # initial enemy health
-export var fire_rate = 0.33         # zaps / second
+var health = max_health     # initial enemy health
+enum {
+	NORMAL,
+	TOUCHED,
+	DAMAGED
+}
+var condition = NORMAL
 
 # @@@ STATE MACHINE @@@
 enum {
@@ -67,7 +75,7 @@ func attack():
 	# attemp to shoot
 	if cooldown <= 0.0:
 		var angle_to_player = get_angle_to(target)
-		shoot_zap(angle_to_player)
+		zap_barrage(angle_to_player)
 
 	# trigger a dodge randomly based in prob
 	if randi()%1000+1 <= dodge_chance && dodging == false:
@@ -78,7 +86,14 @@ func dodge(delta: float):
 		# if not dodging, start dodge
 		timer = 1.5
 		dodging = true
-		$BodySprite.play() # dodge animation
+		# start appropiate animation
+		match condition:
+			NORMAL:
+				$BodySprite.play("dodge") # dodge animation
+			TOUCHED:
+				$BodySprite.play("dodge_touched")
+			DAMAGED	:
+				$BodySprite.play("dodge_damaged")
 		# decide random direction
 		if randi()%2 == 0:
 			# dodge right
@@ -112,10 +127,17 @@ func return_to_swarm():
 func update_health_bar():
 	$HealthBar/GreenBar.scale.x = health / 100.0
 
+func zap_barrage(angle: float):
+	if randi()%1000 < shoot_bias:
+		cooldown = 1.0 / fire_rate
+		
+		shoot_zap(angle)
+		yield(get_tree().create_timer(0.2), "timeout")
+		shoot_zap(angle)
+		yield(get_tree().create_timer(0.2), "timeout")
+		shoot_zap(angle)
+
 func shoot_zap(angle: float):
-	# reset cooldown
-	cooldown = 1 / fire_rate
-	
 	# create zap
 	var zap = Zap.instance()
 	zap.global_position = global_position
@@ -123,17 +145,48 @@ func shoot_zap(angle: float):
 	zap.rotation = PI + randi()%6
 	get_tree().current_scene.add_child(zap)
 
+func update_condition():
+	if health < max_health:
+		condition = TOUCHED
+	if health < max_health * 0.4:
+		condition = DAMAGED
+	
+	if state != DODGE:
+		match condition:
+			NORMAL:
+				$BodySprite.play("idle")
+			TOUCHED:
+				$BodySprite.play("idle_touched")
+			DAMAGED	:
+				$BodySprite.play("idle_damaged")
+	if state == DODGE:
+		match condition:
+			NORMAL:
+				$BodySprite.play("dodge")
+			TOUCHED:
+				$BodySprite.play("dodge_touched")
+			DAMAGED	:
+				$BodySprite.play("dodge_damaged")
+
 # @@@ SIGNAL METHODS @@@
 # triggers when a bullet touches enemy body
 func _on_BulletDetector_area_entered(area: Area2D) -> void:
 	# take damage
 	health -= area.get_parent().damage
 	update_health_bar()
+	update_condition()
 
 # when dodge animation ends, reset idle animation
 func _on_BodySprite_animation_finished() -> void:
-	$BodySprite.stop()
 	$BodySprite.frame = 0
+	# start appropiate animation
+	match condition:
+		NORMAL:
+			$BodySprite.play("idle")
+		TOUCHED:
+			$BodySprite.play("idle_touched")
+		DAMAGED	:
+			$BodySprite.play("idle_damaged")
 
 func _on_WorldDetector_body_entered(body: Node) -> void:
 	queue_free()

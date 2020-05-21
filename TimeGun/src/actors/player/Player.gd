@@ -1,7 +1,11 @@
 extends KinematicBody2D
 
 # @@@ PLAYER ATTRIBUTES @@@
-export var health = 100.0 # initial health
+export var max_health = 100.0 # initial health
+var current_health
+
+export var fire_rate = 10 # shots per second
+var shoot_cooldown = 1 / fire_rate
 
 # @@@ MOVEMENT VARS @@@
 var velocity = Vector2.ZERO
@@ -14,15 +18,29 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_released("zoom_in"):
 		$Camera2D.zoom /= 2
 
+func _init() -> void:
+	current_health = max_health
+
+func _ready() -> void:
+	# set this player as current player
+	get_tree().current_scene.player = self
+
 func _process(delta: float) -> void:
 	# death check
-	if health <= 0.0:
+	if current_health <= 0.0:
 		death()
+	
+	# decrease cooldown
+	shoot_cooldown -= delta
 	
 	# movement
 	movement()
 	
 	velocity = move_and_slide(velocity)
+	
+	# shooting (pressed makes it automatic)
+	if Input.is_action_pressed("shoot"):
+		shoot()
 
 	# Sprite rotation
 	var current_angle = get_angle_to(get_global_mouse_position())
@@ -33,10 +51,6 @@ func _process(delta: float) -> void:
 	if ($Body.rotation - max_angle) > 0 || (min_angle - $Body.rotation) > 0:
 		$Body.rotation = current_angle
 
-	# shooting (pressed makes it automatic)
-	if Input.is_action_pressed("shoot"):
-		shoot()
-
 func movement():
 	var direction = Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
@@ -46,17 +60,20 @@ func movement():
 	velocity = direction.normalized() * mov_speed
 
 func shoot():
-	var shot_angle = get_angle_to(get_global_mouse_position()) 
-	$GunPivot/Gun.shoot(shot_angle)
+	if shoot_cooldown <= 0.0:
+		shoot_cooldown = (1.0/fire_rate)
+		var shot_angle = get_angle_to(get_global_mouse_position()) 
+		$GunPivot/Gun.shoot(shot_angle)
 
 func death():
+	get_tree().current_scene.current_player = null
 	queue_free()
 
 func update_health_bar():
-	$HealthBar/GreenBar.scale.x = health / 100.0
+	$HealthBar/GreenBar.scale.x = current_health / max_health
 
 # triggers when something hurts the player
 func _on_HurtBox_area_entered(area: Area2D) -> void:
 	print("player damaged")
-	health -= area.get_parent()._player_damage
+	current_health -= area.get_parent()._player_damage
 	update_health_bar()
