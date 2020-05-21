@@ -405,7 +405,6 @@ shape = SubResource( 21 )
 [node name="BodySprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 18 )
 animation = "dodge"
-frame = 9
 playing = true
 [connection signal="area_entered" from="BulletDetector" to="." method="_on_BulletDetector_area_entered"]
 [connection signal="body_entered" from="WorldDetector" to="." method="_on_WorldDetector_body_entered"]

@@ -18,8 +18,7 @@ var layer_posy = 0
 
 # collision mask used for tilemaps created
 var layer_collisionmask = 1
-# tileset resource path
-var layer_tileset = null
+
 # tileset cell size
 var layer_cellx = 32
 var layer_celly = 32

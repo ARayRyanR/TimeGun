@@ -217,10 +217,6 @@ func rule_center_layer():
 	self.layer_posy = - map_height / 2
 
 # @@@ TILESET RELATED RULES @@@
-# sets layer tileset attribute
-func rule_load_tileset(tileset: String):
-	self.layer_tileset = load(tileset)
-
 func rule_set_tilesize(sizex: int, sizey: int):
 	self.layer_cellx = sizex
 	self.layer_celly = sizey
@@ -231,10 +227,10 @@ func rule_set_variations(variations: Array):
 # @@@ TILEMAP CREATION RULES @@@
 # creates a tilemap and adds it to the layer
 # adds tiles for each one in layer_grid
-func rule_build_tilemap_from_ones():
+func rule_build_tilemap_from_ones(tileset: String):
 	# setup tilemap
 	var map = TileMap.new()
-	map.tile_set = self.layer_tileset
+	map.tile_set = load(tileset)
 	map.global_position = Vector2(self.layer_posx, self.layer_posy)
 	map.cell_size = Vector2(self.layer_cellx, self.layer_celly)
 	map.collision_mask = self.layer_collisionmask

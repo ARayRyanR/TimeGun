@@ -13,7 +13,6 @@ func apply_ruleset(ruleset: String):
 func ruleset_world():
 	# init values
 	rule_grid_size(MAP_WIDTH, MAP_HEIGHT) # map size
-	rule_load_tileset("res://assets/tilesets/wall.tres")
 	rule_set_variations([[1, 10]]) # tile 1 has 1% prob
 	rule_set_tilesize(64, 64)
 	# create grid
@@ -39,19 +38,18 @@ func ruleset_world():
 	# build tilemap from grid
 	if self.layer_valid:
 		# only if layer was valid (save time)
-		rule_build_tilemap_from_ones()
+		rule_build_tilemap_from_ones("res://assets/tilesets/wall.tres")
 
 # simply creates the floor
 func ruleset_floor():
 	# init values
 	rule_grid_size(MAP_WIDTH, MAP_HEIGHT) # map size
-	rule_load_tileset("res://assets/tilesets/grass.tres")
 	rule_set_tilesize(64, 64)
 	
 	 # create grid
 	rule_ones_grid()
 	# build tilemap
-	rule_build_tilemap_from_ones()
+	rule_build_tilemap_from_ones("res://assets/tilesets/grass.tres")
 
 func ruleset_pipes():
 	# init
