@@ -41,4 +41,6 @@ func ruleset_world():
 	rule_spawn_swarm()
 
 	# Spawn the player
-	rule_spawn_player()
+	var player = rule_spawn_player()
+	get_parent().player = player
+	add_child(player)

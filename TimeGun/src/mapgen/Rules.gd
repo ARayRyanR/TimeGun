@@ -320,7 +320,7 @@ func rule_spawn_swarm():
 	self.add_child(swarm)
 
 # spawns the player
-func rule_spawn_player():
+func rule_spawn_player() -> Node:
 	var gridx = self.layer_gridx
 	var gridy = self.layer_gridy
 	
@@ -336,4 +336,4 @@ func rule_spawn_player():
 	# create player
 	var player = load("res://src/actors/player/Player.tscn").instance()
 	player.global_position = _get_tile_position(x, y)
-	self.add_child(player)
+	return player
