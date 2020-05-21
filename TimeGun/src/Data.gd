@@ -1,6 +1,10 @@
 extends Node
 
 # @@@ DATA @@@
+var objectives = {
+	"enemies": 0
+}
+
 var player = {
 	# Main player attributes
 	"max_health": 100.0,

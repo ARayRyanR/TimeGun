@@ -198,4 +198,4 @@ func _on_BodySprite_animation_finished() -> void:
 			$BodySprite.play("idle_damaged")
 
 func _on_WorldDetector_body_entered(body: Node) -> void:
-	queue_free()
+	death()
