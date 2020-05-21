@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 # @@@ PLAYER ATTRIBUTES @@@
 export var max_health = 100.0 # initial health
-var current_health
+var current_health = max_health
 
 export var fire_rate = 10 # shots per second
 var shoot_cooldown = 1 / fire_rate
@@ -17,13 +17,6 @@ func _input(event: InputEvent) -> void:
 		$Camera2D.zoom *= 2
 	if event.is_action_released("zoom_in"):
 		$Camera2D.zoom /= 2
-
-func _init() -> void:
-	current_health = max_health
-
-func _ready() -> void:
-	# set this player as current player
-	get_tree().current_scene.player = self
 
 func _process(delta: float) -> void:
 	# death check
@@ -66,7 +59,8 @@ func shoot():
 		$GunPivot/Gun.shoot(shot_angle)
 
 func death():
-	get_tree().current_scene.current_player = null
+	# notify game that player is dead
+	get_tree().current_scene.player = null
 	queue_free()
 
 func update_health_bar():

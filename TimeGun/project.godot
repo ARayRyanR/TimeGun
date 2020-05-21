@@ -10,30 +10,18 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node2D",
-"class": "MapGenerator",
+"class": "Layer",
 "language": "GDScript",
-"path": "res://src/mapgen/MapGenerator.gd"
-}, {
-"base": "Rules",
-"class": "RuleSets",
-"language": "GDScript",
-"path": "res://src/mapgen/RuleSets.gd"
-}, {
-"base": "Node2D",
-"class": "Rules",
-"language": "GDScript",
-"path": "res://src/mapgen/Rules.gd"
+"path": "res://src/mapgen/Layer.gd"
 } ]
 _global_script_class_icons={
-"MapGenerator": "",
-"RuleSets": "",
-"Rules": ""
+"Layer": ""
 }
 
 [application]
 
 config/name="TimeGun"
-run/main_scene="res://src/world/World.tscn"
+run/main_scene="res://src/Game.tscn"
 config/icon="res://icon.png"
 
 [importer_defaults]
