@@ -24,6 +24,9 @@ var layer_collisionmask = 1
 # tileset cell size
 var layer_cellx = 32
 var layer_celly = 32
+# tile flips
+var layer_tile_flipv = false
+var layer_tile_fliph = false
 # dictionary used for variation selection
 var layer_tile_variations = []
 
@@ -130,9 +133,9 @@ func rule_set_grid(grid: Array):
 # sets grid to zeros
 func rule_zero_grid():
 	var new_grid = []
-	for x in range(layer_gridx):
+	for _x in range(layer_gridx):
 		var col = []
-		for y in range(layer_gridy):
+		for _y in range(layer_gridy):
 			col.append(0)
 		new_grid.append(col)
 	# return generated grid
@@ -141,9 +144,9 @@ func rule_zero_grid():
 # sets grid to ones
 func rule_ones_grid():
 	var new_grid = []
-	for x in range(layer_gridx):
+	for _x in range(layer_gridx):
 		var col = []
-		for y in range(layer_gridy):
+		for _y in range(layer_gridy):
 			col.append(1)
 		new_grid.append(col)
 	# return generated grid
@@ -217,6 +220,144 @@ func rule_smooth_corners():
 	# set new grid
 	layer_grid = copy
 
+# 'Casts' the shadow of current ones in grid (returns array of created tilemaps)
+func rule_create_shadows(tileset: Resource) -> Array:
+	var maps = []
+	
+	# setup tilemap
+	var map1 = TileMap.new()
+	map1.tile_set = tileset
+	map1.global_position = Vector2(layer_posx, layer_posy)
+	map1.cell_size = Vector2(layer_cellx, layer_celly)
+	map1.collision_mask = layer_collisionmask
+	
+	# create grid of zeros to store shadows
+	var shadows = []
+	for _x in range(layer_gridx):
+		var col = []
+		for _y in range(layer_gridy):
+			col.append(0)
+		shadows.append(col)
+	
+	# --- create bottom shadows
+	# loop through all 1x2 cells in grid
+	for posx in range(layer_gridx):
+		for posy in range(layer_gridy-1):
+			# check if cell is of type [1, 0]
+			if layer_grid[posx][posy] == 1 && layer_grid[posx][posy+1] == 0:
+				# then we cast the shadow
+				shadows[posx][posy+1] = 1
+	
+	# draw tiles
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if shadows[x][y] == 1:
+				# add tile to map
+				map1.set_cell(x, y, 0, false, false)
+	maps.append(map1)
+	
+	# setup tilemap
+	var map2 = TileMap.new()
+	map2.tile_set = tileset
+	map2.global_position = Vector2(layer_posx, layer_posy)
+	map2.cell_size = Vector2(layer_cellx, layer_celly)
+	map2.collision_mask = layer_collisionmask
+	
+	# create grid of zeros to store shadows
+	shadows = []
+	for _x in range(layer_gridx):
+		var col = []
+		for _y in range(layer_gridy):
+			col.append(0)
+		shadows.append(col)
+	
+	# --- create top shadows
+	# loop through all 1x2 cells in grid
+	for posx in range(layer_gridx):
+		for posy in range(layer_gridy-1):
+			# check if cell is of type [0, 1]
+			if layer_grid[posx][posy+1] == 1 && layer_grid[posx][posy] == 0:
+				# then we cast the shadow
+				shadows[posx][posy] = 1
+	
+	# draw tiles
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if shadows[x][y] == 1:
+				# add tile to map
+				map2.set_cell(x, y, 0, false, true)
+	
+	maps.append(map2)
+	
+	# setup tilemap
+	var map3 = TileMap.new()
+	map3.tile_set = tileset
+	map3.global_position = Vector2(layer_posx, layer_posy)
+	map3.cell_size = Vector2(layer_cellx, layer_celly)
+	map3.collision_mask = layer_collisionmask
+	
+	# create grid of zeros to store shadows
+	shadows = []
+	for _x in range(layer_gridx):
+		var col = []
+		for _y in range(layer_gridy):
+			col.append(0)
+		shadows.append(col)
+	
+	# --- create left shadows
+	# loop through all 2x1 cells in grid
+	for posx in range(layer_gridx-1):
+		for posy in range(layer_gridy):
+			# check if cell is of type [0, 1]
+			if layer_grid[posx][posy] == 0 && layer_grid[posx+1][posy] == 1:
+				# then we cast the shadow
+				shadows[posx][posy] = 1
+	
+	# draw tiles
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if shadows[x][y] == 1:
+				# add tile to map
+				map3.set_cell(x, y, 0, true, false, true)
+	
+	maps.append(map3)
+	
+	# setup tilemap
+	var map4 = TileMap.new()
+	map4.tile_set = tileset
+	map4.global_position = Vector2(layer_posx, layer_posy)
+	map4.cell_size = Vector2(layer_cellx, layer_celly)
+	map4.collision_mask = layer_collisionmask
+	
+	# create grid of zeros to store shadows
+	shadows = []
+	for _x in range(layer_gridx):
+		var col = []
+		for _y in range(layer_gridy):
+			col.append(0)
+		shadows.append(col)
+	
+	# --- create right shadows
+	# loop through all 2x1 cells in grid
+	for posx in range(layer_gridx-1):
+		for posy in range(layer_gridy):
+			# check if cell is of type [1, 0]
+			if layer_grid[posx][posy] == 1 && layer_grid[posx+1][posy] == 0:
+				# then we cast the shadow
+				shadows[posx+1][posy] = 1
+	
+	# draw tiles
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if shadows[x][y] == 1:
+				# add tile to map
+				map4.set_cell(x, y, 0, false, false, true)
+	
+	maps.append(map4)
+	
+	# add map to layer
+	return maps
+
 # fills are disconnected areas with ones
 func rule_flood_ones():
 	# find random zero cell
@@ -263,6 +404,12 @@ func rule_set_tilesize(sizex: int, sizey: int):
 	layer_cellx = sizex
 	layer_celly = sizey
 
+# sets the flip boolenas for tile creation
+func rule_set_tile_flipv(flip: bool):
+	layer_tile_flipv = flip
+func rule_set_tile_fliph(flip: bool):
+	layer_tile_fliph = flip
+
 func rule_set_variations(variations: Array):
 	layer_tile_variations = variations
 
@@ -290,7 +437,7 @@ func rule_build_tilemap_from_ones(tileset: Resource) -> TileMap:
 					if randi()%1000<i[1]:
 						tile = i[0]
 				# add resulting tile to map
-				map.set_cell(x, y, tile)
+				map.set_cell(x, y, tile, layer_tile_fliph, layer_tile_flipv)
 	
 	# add map to layer
 	return map
