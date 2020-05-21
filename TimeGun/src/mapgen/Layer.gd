@@ -242,9 +242,6 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map1.cell_size = Vector2(layer_cellx, layer_celly)
 	map1.collision_mask = layer_collisionmask
 	
-	# create grid of zeros to store shadows
-	var shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
-	
 	# --- create bottom shadows
 	# loop through all 1x2 cells in grid
 	for posx in range(layer_gridx):
@@ -252,14 +249,8 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 			# check if cell is of type [1, 0]
 			if layer_grid[posx][posy] == 1 && layer_grid[posx][posy+1] == 0:
 				# then we cast the shadow
-				shadows[posx][posy+1] = 1
-	
-	# draw tiles
-	for x in range(layer_gridx):
-		for y in range(layer_gridy):
-			if shadows[x][y] == 1:
-				# add tile to map
-				map1.set_cell(x, y, 0, false, false)
+				map1.set_cell(posx, posy+1, 0, false, false, false)
+
 	maps.append(map1)
 	
 	# setup tilemap
@@ -269,9 +260,6 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map2.cell_size = Vector2(layer_cellx, layer_celly)
 	map2.collision_mask = layer_collisionmask
 	
-	# create grid of zeros to store shadows
-	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
-	
 	# --- create top shadows
 	# loop through all 1x2 cells in grid
 	for posx in range(layer_gridx):
@@ -279,14 +267,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 			# check if cell is of type [0, 1]
 			if layer_grid[posx][posy+1] == 1 && layer_grid[posx][posy] == 0:
 				# then we cast the shadow
-				shadows[posx][posy] = 1
-	
-	# draw tiles
-	for x in range(layer_gridx):
-		for y in range(layer_gridy):
-			if shadows[x][y] == 1:
-				# add tile to map
-				map2.set_cell(x, y, 0, false, true)
+				map2.set_cell(posx, posy, 0, false, true, false)
 	
 	maps.append(map2)
 	
@@ -296,10 +277,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map3.global_position = Vector2(layer_posx, layer_posy)
 	map3.cell_size = Vector2(layer_cellx, layer_celly)
 	map3.collision_mask = layer_collisionmask
-	
-	# create grid of zeros to store shadows
-	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
-	
+
 	# --- create left shadows
 	# loop through all 2x1 cells in grid
 	for posx in range(layer_gridx-1):
@@ -307,14 +285,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 			# check if cell is of type [0, 1]
 			if layer_grid[posx][posy] == 0 && layer_grid[posx+1][posy] == 1:
 				# then we cast the shadow
-				shadows[posx][posy] = 1
-	
-	# draw tiles
-	for x in range(layer_gridx):
-		for y in range(layer_gridy):
-			if shadows[x][y] == 1:
-				# add tile to map
-				map3.set_cell(x, y, 0, true, false, true)
+				map3.set_cell(posx, posy, 0, true, false, true)
 	
 	maps.append(map3)
 	
@@ -325,9 +296,6 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map4.cell_size = Vector2(layer_cellx, layer_celly)
 	map4.collision_mask = layer_collisionmask
 	
-	# create grid of zeros to store shadows
-	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
-	
 	# --- create right shadows
 	# loop through all 2x1 cells in grid
 	for posx in range(layer_gridx-1):
@@ -335,14 +303,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 			# check if cell is of type [1, 0]
 			if layer_grid[posx][posy] == 1 && layer_grid[posx+1][posy] == 0:
 				# then we cast the shadow
-				shadows[posx+1][posy] = 1
-	
-	# draw tiles
-	for x in range(layer_gridx):
-		for y in range(layer_gridy):
-			if shadows[x][y] == 1:
-				# add tile to map
-				map4.set_cell(x, y, 0, false, false, true)
+				map4.set_cell(posx+1, posy, 0, false, false, true)
 	
 	maps.append(map4)
 	
@@ -354,9 +315,6 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	map5.cell_size = Vector2(layer_cellx, layer_celly)
 	map5.collision_mask = layer_collisionmask
 	
-	# create grid of zeros to store shadows
-	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
-	
 	# --- create right shadows
 	# loop through all 2x2 cells in grid
 	for posx in range(layer_gridx-1):
@@ -365,14 +323,7 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 			#                          [0, 0]
 			if layer_grid[posx][posy] == 1 && layer_grid[posx+1][posy] == 0 && layer_grid[posx][posy+1] == 0 && layer_grid[posx+1][posy+1] == 0:
 				# then we cast the shadow
-				shadows[posx+1][posy+1] = 1
-	
-	# draw tiles
-	for x in range(layer_gridx):
-		for y in range(layer_gridy):
-			if shadows[x][y] == 1:
-				# add tile to map
-				map5.set_cell(x, y, 1, false, false, false)
+				map5.set_cell(posx+1, posy+1, 1, false, false, false)
 	
 	maps.append(map5)
 	
