@@ -1,4 +1,5 @@
-extends RuleSets
+extends Rules
+class_name Layer
 
 # used to check if layer was valid
 var layer_valid = true

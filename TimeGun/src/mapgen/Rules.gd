@@ -56,10 +56,10 @@ func _flood_neighbours(x: int, y: int):
 		_flood_neighbours(x, y+1)
 
 # returns global position based on tile coords (middle of tile)
-func _get_tile_position(x: int, y: int):
+func _get_tile_position(x: int, y: int) -> Vector2:
 	var pos = Vector2.ZERO
-	pos.x = self.layer_posx + (x + 1/2) * self.layer_cellx
-	pos.y = self.layer_posy + (y + 1/2) * self.layer_celly
+	pos.x = self.layer_posx + (x + 1.0/2.0) * self.layer_cellx
+	pos.y = self.layer_posy + (y + 1.0/2.0) * self.layer_celly
 	return pos
 
 # returns tile at given global_pos
@@ -70,6 +70,22 @@ func _get_tile(position: Vector2) -> Array:
 
 # @@@ RULE DEFINITIONS @@@
 # @@@ GRID RELATED RULES @@@
+# returns a random global position that has a 0 on current grid
+func rule_get_empty_position():
+	var gridx = self.layer_gridx
+	var gridy = self.layer_gridy
+
+	var x = 0
+	var y = 0
+	while true:
+		x = randi()%gridx
+		y = randi()%gridy
+		if self.layer_grid[x][y] == 0:
+			break
+	
+	var pos = _get_tile_position(x, y)
+	return pos
+
 # sets layer map size
 func rule_grid_size(x: int, y :int):
 	self.layer_gridx = x
@@ -231,7 +247,7 @@ func rule_set_variations(variations: Array):
 # @@@ TILEMAP CREATION RULES @@@
 # creates a tilemap and adds it to the layer
 # adds tiles for each one in layer_grid
-func rule_build_tilemap_from_ones(tileset: Resource):
+func rule_build_tilemap_from_ones(tileset: Resource) -> TileMap:
 	# setup tilemap
 	var map = TileMap.new()
 	map.tile_set = tileset
@@ -254,25 +270,10 @@ func rule_build_tilemap_from_ones(tileset: Resource):
 				map.set_cell(x, y, tile)
 	
 	# add map to layer
-	self.add_child(map)
-
-# spawns an instance of the given scene at every one
-func rule_build_objects_from_ones(scene: String):
-	var gridx = self.layer_gridx
-	var gridy = self.layer_gridy
-	
-	var O = load(scene)
-	
-	for x in range(gridx):
-		for y in range(gridy):
-			if self.layer_grid[x][y] == 1:
-				# create object
-				var o = O.instance()
-				o.global_position = _get_tile_position(x, y)
-				self.add_child(o)
+	return map
 
 # @@@ MAP CHECKS @@@
-# ensures a given amount of area is 0's (using bias aux var)
+# ensures a given amount of area is 0's
 func rule_check_area(bias: int):
 	var gridx = self.layer_gridx
 	var gridy = self.layer_gridy
@@ -291,49 +292,3 @@ func rule_check_area(bias: int):
 		self.layer_valid = false
 	else:
 		print("passed check")
-
-# makes sure player is in open space
-func rule_check_player():
-	var player_tile = self.layer_player_tile
-	if player_tile:
-		if self.layer_grid[player_tile[0]][player_tile[1]] != 0:
-			self.layer_valid = false
-
-# @@@ OBJECT CREATION RULES @@@
-# spawns a swarm at random rect
-func rule_spawn_swarm():
-	var gridx = self.layer_gridx
-	var gridy = self.layer_gridy
-	
-	# Find empty tile
-	var x = 0
-	var y = 0
-	while true:
-		x = randi()%gridx
-		y = randi()%gridy
-		if self.layer_grid[x][y] == 0:
-			break
-	
-	# create swarm
-	var swarm = load("res://src/actors/drones/DroneSwarm.tscn").instance()
-	swarm.global_position = _get_tile_position(x, y)
-	self.add_child(swarm)
-
-# spawns the player
-func rule_spawn_player() -> Node:
-	var gridx = self.layer_gridx
-	var gridy = self.layer_gridy
-	
-	# Find empty tile
-	var x = 0
-	var y = 0
-	while true:
-		x = randi()%gridx
-		y = randi()%gridy
-		if self.layer_grid[x][y] == 0:
-			break
-	
-	# create player
-	var player = load("res://src/actors/player/Player.tscn").instance()
-	player.global_position = _get_tile_position(x, y)
-	return player
