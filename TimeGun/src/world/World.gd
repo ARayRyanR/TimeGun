@@ -1,6 +1,7 @@
 extends MapGenerator
 
-var current_player = null
+var layer = null
+var player = null
 
 func _ready() -> void:
 	create_map()
@@ -11,8 +12,8 @@ func _input(event: InputEvent) -> void:
 
 func create_map():
 	randomize()
-	delete_layers()
 	
-	create_layer("floor_layer", "floor")
-	var walls = create_layer("main_layer", "world")
-	#create_layer("overlay", "pipes")
+	if layer:
+		layer.queue_free()
+	
+	layer = create_layer("main_layer", "world")

@@ -59,7 +59,8 @@ func drones_idle():
 # @@@ UTILITY METHODS @@@
 func find_player():
 	# get player node
-	player = get_tree().current_scene.current_player
+	player = get_tree().current_scene.player
+	# TODO: redo player finding code!!!
 	if player:
 		# cast detector ray to player
 		$SwarmBody/WorldDetector.cast_to = (player.global_position - $SwarmBody.global_position)

@@ -231,10 +231,10 @@ func rule_set_variations(variations: Array):
 # @@@ TILEMAP CREATION RULES @@@
 # creates a tilemap and adds it to the layer
 # adds tiles for each one in layer_grid
-func rule_build_tilemap_from_ones(tileset: String):
+func rule_build_tilemap_from_ones(tileset: Resource):
 	# setup tilemap
 	var map = TileMap.new()
-	map.tile_set = load(tileset)
+	map.tile_set = tileset
 	map.global_position = Vector2(self.layer_posx, self.layer_posy)
 	map.cell_size = Vector2(self.layer_cellx, self.layer_celly)
 	map.collision_mask = self.layer_collisionmask
@@ -300,47 +300,40 @@ func rule_check_player():
 			self.layer_valid = false
 
 # @@@ OBJECT CREATION RULES @@@
-func rule_spawn_player():
-	var gridx = self.layer_gridx
-	var gridy = self.layer_gridy
-	
-	# create random room
-	var sizex = 8
-	var sizey = 8
-	var posx = randi()%(gridx - sizex)
-	var posy = randi()%(gridy - sizey)
-	
-	# empty room
-	for x in range(sizex):
-		for y in range(sizey):
-			self.layer_grid[posx + x][posy + y] = 0
-	
-	# create player
-	var player = load("res://src/actors/player/Player.tscn").instance()
-	player.global_position = _get_tile_position(posx + sizex/2, posy + sizey/2)
-	player.get_node("Camera2D").limit_right = self.layer_posx + self.layer_gridx * self.layer_cellx
-	player.get_node("Camera2D").limit_bottom = self.layer_posy + self.layer_gridy * self.layer_celly
-	self.add_child(player)
-	
-	self.layer_player_tile = [posx + sizex/2, posy + sizey/2]
-
 # spawns a swarm at random rect
 func rule_spawn_swarm():
 	var gridx = self.layer_gridx
 	var gridy = self.layer_gridy
 	
-	# create random room
-	var sizex = 8
-	var sizey = 8
-	var posx = randi()%(gridx - sizex)
-	var posy = randi()%(gridy - sizey)
+	# Find empty tile
+	var x = 0
+	var y = 0
+	while true:
+		x = randi()%gridx
+		y = randi()%gridy
+		if self.layer_grid[x][y] == 0:
+			break
 	
-	# empty room
-	for x in range(sizex):
-		for y in range(sizey):
-			self.layer_grid[posx + x][posy + y] = 0
+	# create swarm
+	var swarm = load("res://src/actors/drones/DroneSwarm.tscn").instance()
+	swarm.global_position = _get_tile_position(x, y)
+	self.add_child(swarm)
+
+# spawns the player
+func rule_spawn_player():
+	var gridx = self.layer_gridx
+	var gridy = self.layer_gridy
+	
+	# Find empty tile
+	var x = 0
+	var y = 0
+	while true:
+		x = randi()%gridx
+		y = randi()%gridy
+		if self.layer_grid[x][y] == 0:
+			break
 	
 	# create player
-	var swarm = load("res://src/actors/drones/DroneSwarm.tscn").instance()
-	swarm.global_position = _get_tile_position(posx + sizex/2, posy + sizey/2)
-	self.add_child(swarm)
+	var player = load("res://src/actors/player/Player.tscn").instance()
+	player.global_position = _get_tile_position(x, y)
+	self.add_child(player)

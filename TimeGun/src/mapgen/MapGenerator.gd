@@ -4,7 +4,7 @@ class_name MapGenerator
 var Layer = preload("res://src/mapgen/Layer.tscn")
 
 # creates a layer with the given name and using the rule set given
-func create_layer(name: String, ruleset: String) -> Array:
+func create_layer(name: String, ruleset: String) -> Node:
 	# create new layer
 	var layer = Layer.instance()
 	layer.name = name
@@ -14,10 +14,6 @@ func create_layer(name: String, ruleset: String) -> Array:
 	if layer.layer_valid:
 		# add and break
 		add_child(layer)
-		return layer.layer_grid
+		return layer
 	else:
 		return create_layer(name, ruleset)
-
-func delete_layers():
-	for n in get_children():
-		n.queue_free()

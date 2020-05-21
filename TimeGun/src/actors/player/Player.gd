@@ -23,7 +23,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	# set this player as current player
-	get_tree().current_scene.current_player = self
+	get_tree().current_scene.player = self
 
 func _process(delta: float) -> void:
 	# death check
