@@ -79,6 +79,9 @@ func ruleset_world():
 	var pos = rule_get_empty_position()
 	player = Player.instance()
 	player.global_position = pos
+	# set player camera limits
+	player.get_node("Camera2D").limit_right = layer_gridx*layer_cellx
+	player.get_node("Camera2D").limit_bottom = layer_gridy*layer_celly
 	$Player.add_child(player)
 	
 	# Spawn a swarm
