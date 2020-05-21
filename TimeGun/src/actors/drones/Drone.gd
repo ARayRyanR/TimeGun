@@ -7,9 +7,7 @@ var dodge_chance
 var fire_rate
 var shoot_bias
 var max_health
-
-# @@@ PROJECTILE SCENE @@@
-var Zap = preload("res://src/objects/Zap.tscn")
+var Zap
 
 # @@@ NODES @@@
 onready var swarm = get_parent().get_parent()
@@ -47,6 +45,7 @@ func _init():
 	fire_rate = Data.drones.fire_rate
 	shoot_bias = Data.drones.shoot_bias
 	max_health = Data.drones.max_health
+	Zap = Data.drones.projectile
 	
 	# init values
 	health = max_health
