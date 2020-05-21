@@ -4,33 +4,36 @@ extends Layer
 var player = null
 
 func _ready() -> void:
-	create_map()
+	create_map("regular")
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_select"):
 		player = null
-		create_map()
+		create_map("regular")
 
 # Creates a valid map
-func create_map():
+func create_map(ruleset: String):
 	randomize()
 	
 	# resets map
-	clear_map()
+	_clear_map()
 	# creates new map
-	ruleset_world()
+	_use_ruleset(ruleset)
 	# makes sure is valid
 	if layer_valid:
 		return
 	# if not, reset and try again
 	else:
 		layer_valid = true
-		create_map()
+		create_map(ruleset)
 
-func clear_map():
+func _clear_map():
 	for l in get_children():
 		for n in l.get_children():
 			n.queue_free()
+
+func _use_ruleset(ruleset: String):
+	call("ruleset_" + ruleset)
 
 ################################################################################
 #                    MAP RULESET
@@ -46,7 +49,7 @@ var Swarm       = preload("res://src/actors/drones/DroneSwarm.tscn")
 
 # @@@ RULE SETS DEFINITIONS @@@
 # creates the walls, player, enemies, etc
-func ruleset_world():
+func ruleset_regular():
 	# Create map grid
 	rule_grid_size(MAP_WIDTH, MAP_HEIGHT)
 	
