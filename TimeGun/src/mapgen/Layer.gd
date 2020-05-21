@@ -345,7 +345,37 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 				map4.set_cell(x, y, 0, false, false, true)
 	
 	maps.append(map4)
-		
+	
+	# ----- generate corner occlusion maps -----
+	# setup tilemap
+	var map5 = TileMap.new()
+	map5.tile_set = tileset
+	map5.global_position = Vector2(layer_posx, layer_posy)
+	map5.cell_size = Vector2(layer_cellx, layer_celly)
+	map5.collision_mask = layer_collisionmask
+	
+	# create grid of zeros to store shadows
+	shadows = _gen_grid_zeros(layer_gridx, layer_gridy)
+	
+	# --- create right shadows
+	# loop through all 2x2 cells in grid
+	for posx in range(layer_gridx-1):
+		for posy in range(layer_gridy-1):
+			# check if cell is of type [1, 0]
+			#                          [0, 0]
+			if layer_grid[posx][posy] == 1 && layer_grid[posx+1][posy] == 0 && layer_grid[posx][posy+1] == 0 && layer_grid[posx+1][posy+1] == 0:
+				# then we cast the shadow
+				shadows[posx+1][posy+1] = 1
+	
+	# draw tiles
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if shadows[x][y] == 1:
+				# add tile to map
+				map5.set_cell(x, y, 1, false, false, false)
+	
+	maps.append(map5)
+	
 	# add map to layer
 	return maps
 
