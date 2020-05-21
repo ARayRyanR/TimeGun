@@ -1,22 +1,34 @@
 extends KinematicBody2D
 
-# @@@ PLAYER ATTRIBUTES @@@
-export var max_health = 100.0 # initial health
-var current_health = max_health
+# @@@ VALUES LOADED FROM DATA FILE @@@
+var max_health
+var fire_rate
+var mov_speed
 
-export var fire_rate = 10 # shots per second
-var shoot_cooldown = 1 / fire_rate
+# @@@ PLAYER ATTRIBUTES @@@
+var current_health
+var shoot_cooldown
 
 # @@@ MOVEMENT VARS @@@
 var velocity = Vector2.ZERO
-export var mov_speed = 300.0
-export var angle_draft = PI/4
+# used for sprite animation
+var angle_draft = PI/4
+
+func _init() -> void:
+	# Load values data object into object
+	max_health = Data.player.max_health
+	fire_rate  = Data.player.fire_rate
+	mov_speed  = Data.player.mov_speed
+
+	# init player values
+	current_health = max_health
+	shoot_cooldown = 1.0 / fire_rate
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_released("zoom_out"):
-		$Camera2D.zoom *= 2
+		$Camera2D.zoom += Vector2(0.5, 0.5)
 	if event.is_action_released("zoom_in"):
-		$Camera2D.zoom /= 2
+		$Camera2D.zoom -= Vector2(0.5, 0.5)
 
 func _process(delta: float) -> void:
 	# death check
