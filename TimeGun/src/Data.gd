@@ -9,6 +9,13 @@ var player = {
 }
 
 var drones = {
+	# Main swarm attributes
+	"detection_range": 750.0,
+	"swarm_speed": 150.0,
+	"swarm_range": 64.0,
+	# Drones for the swarm
+	"drone": preload("res://src/actors/drones/Drone.tscn"),
+	
 	# Main drone attributes
 	"move_speed": 200.0,
 	"dodge_speed": 150.0,
