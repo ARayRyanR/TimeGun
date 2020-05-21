@@ -1,6 +1,8 @@
 extends Rules
 class_name RuleSets
 
+var MAP_WIDTH  = 64
+var MAP_HEIGHT = 64
 
 # This function applies a ruleset to the calling layer
 func apply_ruleset(ruleset: String):
@@ -10,7 +12,7 @@ func apply_ruleset(ruleset: String):
 # creates the main layer (walls, player, enemies)
 func ruleset_world():
 	# init values
-	rule_grid_size(48, 48) # map size
+	rule_grid_size(MAP_WIDTH, MAP_HEIGHT) # map size
 	rule_load_tileset("res://assets/tilesets/wall.tres")
 	rule_set_variations([[1, 10]]) # tile 1 has 1% prob
 	rule_set_tilesize(64, 64)
@@ -21,11 +23,19 @@ func ruleset_world():
 	rule_spawn_player()
 	rule_spawn_swarm()
 	rule_smooth()
+	rule_border_ones()
 	rule_smooth()
+	rule_border_ones()
+	rule_smooth()
+	rule_border_ones()
+	rule_smooth()
+	rule_border_ones()
 	rule_smooth()
 	rule_border_ones()
 	rule_flood_ones()
+	rule_smooth_corners()
 	rule_check_area(450)
+	rule_check_player()
 	# build tilemap from grid
 	if self.layer_valid:
 		# only if layer was valid (save time)
@@ -34,7 +44,7 @@ func ruleset_world():
 # simply creates the floor
 func ruleset_floor():
 	# init values
-	rule_grid_size(48, 48) # map size
+	rule_grid_size(MAP_WIDTH, MAP_HEIGHT) # map size
 	rule_load_tileset("res://assets/tilesets/grass.tres")
 	rule_set_tilesize(64, 64)
 	
@@ -45,7 +55,7 @@ func ruleset_floor():
 
 func ruleset_pipes():
 	# init
-	rule_grid_size(48, 48) # map size
+	rule_grid_size(MAP_WIDTH, MAP_HEIGHT) # map size
 	rule_set_tilesize(64, 64)
 	
 	rule_zero_grid()

@@ -62,6 +62,12 @@ func _get_tile_position(x: int, y: int):
 	pos.y = self.layer_posy + (y + 1/2) * self.layer_celly
 	return pos
 
+# returns tile at given global_pos
+func _get_tile(position: Vector2) -> Array:
+	var x = (position.x - self.layer_posx) / self.layer_cellx
+	var y = (position.y - self.layer_posy) / self.layer_celly
+	return [x, y]
+
 # @@@ RULE DEFINITIONS @@@
 # @@@ GRID RELATED RULES @@@
 # sets layer map size
@@ -142,6 +148,29 @@ func rule_smooth():
 				copy[x][y] = 0
 	
 	# once done, set new grid
+	self.layer_grid = copy
+
+# fills little corners
+func rule_smooth_corners():
+	var gridx = self.layer_gridx
+	var gridy = self.layer_gridy
+	var copy = self.layer_grid
+	
+	# loop through all 2 x 2 sections
+	for x in range(gridx-1):
+		for y in range(gridy-1):
+			var t1 = self.layer_grid[x  ][y]
+			var t2 = self.layer_grid[x+1][y]
+			var t3 = self.layer_grid[x  ][y+1]
+			var t4 = self.layer_grid[x+1][y+1]
+			if t1+t2+t3+t4 == 2:
+				if t1 == t4:
+					copy[x  ][y]   = 1
+					copy[x+1][y]   = 1
+					copy[x  ][y+1] = 1
+					copy[x+1][y+1] = 1
+	
+	# set new grid
 	self.layer_grid = copy
 
 # fills are disconnected areas with ones
@@ -263,6 +292,13 @@ func rule_check_area(bias: int):
 	else:
 		print("passed check")
 
+# makes sure player is in open space
+func rule_check_player():
+	var player_tile = self.layer_player_tile
+	if player_tile:
+		if self.layer_grid[player_tile[0]][player_tile[1]] != 0:
+			self.layer_valid = false
+
 # @@@ OBJECT CREATION RULES @@@
 func rule_spawn_player():
 	var gridx = self.layer_gridx
@@ -285,6 +321,8 @@ func rule_spawn_player():
 	player.get_node("Camera2D").limit_right = self.layer_posx + self.layer_gridx * self.layer_cellx
 	player.get_node("Camera2D").limit_bottom = self.layer_posy + self.layer_gridy * self.layer_celly
 	self.add_child(player)
+	
+	self.layer_player_tile = [posx + sizex/2, posy + sizey/2]
 
 # spawns a swarm at random rect
 func rule_spawn_swarm():

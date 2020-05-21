@@ -3,6 +3,9 @@ extends RuleSets
 # used to check if layer was valid
 var layer_valid = true
 
+# used to store player in layer
+var layer_player_tile = null
+
 # grid size
 var layer_gridx = 32
 var layer_gridy = 32
