@@ -12,7 +12,10 @@ var gun = {
 	# Main gun attributes
 	"shot_speed": 1000.0,
 	"base_damage": 10.0,
-	"spread": PI/32
+	"spread": PI/32,
+	
+	# projectile shot
+	"bullet": preload("res://src/objects/Bullet.tscn")
 }
 
 var drones = {
