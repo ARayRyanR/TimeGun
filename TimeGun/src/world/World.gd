@@ -6,9 +6,9 @@ var player = null
 func _ready() -> void:
 	create_map()
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_released("ui_select"):
-		create_map()
+func advance_level():
+	player = null
+	create_map()
 
 func create_map():
 	randomize()

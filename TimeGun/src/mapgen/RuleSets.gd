@@ -6,6 +6,7 @@ var MAP_HEIGHT = 48
 
 var grass_tiles = preload("res://assets/tilesets/grass.tres")
 var wall_tiles  = preload("res://assets/tilesets/wall.tres")
+var Objective   = preload("res://src/objectives/Objective.tscn")
 
 # This function applies a ruleset to the calling layer
 func apply_ruleset(ruleset: String):
@@ -44,3 +45,8 @@ func ruleset_world():
 	var player = rule_spawn_player()
 	get_parent().player = player
 	add_child(player)
+	
+	# Generate an objective
+	var objective = Objective.instance()
+	add_child(objective)
+	objective.connect("finished", get_parent(), "advance_level")
