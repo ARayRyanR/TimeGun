@@ -217,6 +217,28 @@ func rule_smooth_corners():
 	# set new grid
 	layer_grid = copy
 
+# 'Casts' the shadow of current ones in grid
+func rule_cast_shadows():
+	# create grid of zeros to store shadows
+	var shadows = []
+	for x in range(layer_gridx):
+		var col = []
+		for y in range(layer_gridy):
+			col.append(0)
+		shadows.append(col)
+	
+	# --- create bottom shadows
+	# loop through all 1x2 cells in grid
+	for posx in range(layer_gridx):
+		for posy in range(layer_gridy-1):
+			# check if cell is of type [1, 0]
+			if layer_grid[posx][posy] == 1 && layer_grid[posx][posy+1] == 0:
+				# then we cast the shadow
+				shadows[posx][posy+1] = 1
+	
+	# set new grid
+	layer_grid = shadows
+
 # fills are disconnected areas with ones
 func rule_flood_ones():
 	# find random zero cell
