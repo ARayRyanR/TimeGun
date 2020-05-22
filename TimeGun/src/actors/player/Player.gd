@@ -14,6 +14,13 @@ var current_mag
 # @@@ MOVEMENT VARS @@@
 var velocity = Vector2.ZERO
 
+# @@@ PLAYER STATES @@@
+enum {
+	FREE,
+	RELOADING
+}
+var state = FREE
+
 func _init() -> void:
 	# Load values data object into object
 	max_health = Data.player.max_health
@@ -24,7 +31,7 @@ func _init() -> void:
 	# init player values
 	current_health = max_health
 	shoot_cooldown = 1.0 / fire_rate
-	current_mag = 0#mag_size
+	current_mag = mag_size
 
 func _ready() -> void:
 	# update hud
@@ -40,7 +47,8 @@ func _input(event: InputEvent) -> void:
 	
 	# reloading
 	if event.is_action_pressed("reload"):
-		reload()
+		if state == FREE:
+			reload()
 
 func _process(delta: float) -> void:
 	# death check
@@ -57,7 +65,8 @@ func _process(delta: float) -> void:
 	
 	# shooting (pressed makes it automatic)
 	if Input.is_action_pressed("shoot"):
-		shoot()
+		if state == FREE:
+			shoot()
 
 	# Sprite rotation
 	var current_angle = get_angle_to(get_global_mouse_position())
@@ -73,6 +82,8 @@ func movement():
 	velocity = direction.normalized() * mov_speed
 
 func reload():
+	state = RELOADING
+	
 	# reload logic
 	# play reload sfx
 	$ReloadSFX.play()
@@ -84,6 +95,8 @@ func reload():
 	current_mag = mag_size
 	# update hud
 	update_HUD_mag()
+	
+	state = FREE
 
 func shoot():
 	if shoot_cooldown <= 0.0 && current_mag > 0:
