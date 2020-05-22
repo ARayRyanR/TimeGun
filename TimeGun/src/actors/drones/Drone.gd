@@ -152,7 +152,7 @@ func shoot_zap(angle: float):
 	zap.global_position = global_position
 	zap.linear_velocity = Vector2(zap.zap_speed, 0).rotated(angle)
 	zap.rotation = PI + randi()%6
-	get_tree().current_scene.add_child(zap)
+	get_tree().current_scene.get_node("Bullets").add_child(zap)
 
 func update_condition():
 	if health < max_health:
