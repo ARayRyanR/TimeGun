@@ -49,6 +49,10 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("reload"):
 		if state == FREE:
 			reload()
+	
+	# for debugging
+	if event.is_action_pressed("ui_cancel"):
+		current_health -= 20.0
 
 func _process(delta: float) -> void:
 	# death check
@@ -97,6 +101,10 @@ func reload():
 	update_HUD_mag()
 	
 	state = FREE
+
+func heal(amount: float):
+	current_health = clamp(current_health + amount, 0.0, max_health)
+	update_health_bar()
 
 func shoot():
 	if shoot_cooldown <= 0.0 && current_mag > 0:

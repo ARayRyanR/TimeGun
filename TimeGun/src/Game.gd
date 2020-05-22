@@ -69,6 +69,7 @@ var wall_tiles  = preload("res://assets/tilesets/wall.tres")
 var shadow_tiles= preload("res://assets/tilesets/occlusion.tres")
 var Player      = preload("res://src/actors/player/Player.tscn")
 var Swarm       = preload("res://src/actors/drones/DroneSwarm.tscn")
+var Pickup      = preload("res://src/objects/Pickup.tscn")
 
 # @@@ RULE SETS DEFINITIONS @@@
 # the default map
@@ -116,6 +117,14 @@ func ruleset_regular():
 	var swarm = Swarm.instance()
 	swarm.global_position = pos
 	$Enemies.add_child(swarm)
+	
+	# Spawn some pickups
+	var p = Pickup.instance()
+	p.global_position = rule_get_empty_position()
+	$Walls.add_child(p)
+	p = Pickup.instance()
+	p.global_position = rule_get_empty_position()
+	$Walls.add_child(p)
 	
 	# Create wall shadows
 	var shadow_maps = rule_create_occlusion(shadow_tiles) # get grid of shadows
