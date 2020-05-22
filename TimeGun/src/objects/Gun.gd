@@ -1,4 +1,4 @@
-extends Sprite
+extends AnimatedSprite
 
 # @@@ VALUES STORED IN DATA FILE @@@
 var shot_speed
@@ -15,6 +15,9 @@ func _init() -> void:
 
 # creates bullet at gun position with given angle
 func shoot(shot_angle: float):
+	playing = true
+	frame = 0
+	
 	# play sound fx
 	$ShotSound.play()
 	
@@ -24,7 +27,11 @@ func shoot(shot_angle: float):
 	# create bullet instance
 	var bullet = Bullet.instance()
 	bullet.damage = base_damage
-	bullet.global_position = global_position
+	bullet.global_position = $Barrel.global_position
 	bullet.linear_velocity = Vector2(shot_speed, 0).rotated(angle)
 	bullet.rotation = angle
 	get_tree().current_scene.add_child(bullet)
+
+
+func _on_Gun_animation_finished() -> void:
+	playing = false

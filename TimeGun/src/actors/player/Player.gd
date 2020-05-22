@@ -11,8 +11,6 @@ var shoot_cooldown
 
 # @@@ MOVEMENT VARS @@@
 var velocity = Vector2.ZERO
-# used for sprite animation
-var angle_draft = PI/4
 
 func _init() -> void:
 	# Load values data object into object
@@ -52,10 +50,7 @@ func _process(delta: float) -> void:
 	var current_angle = get_angle_to(get_global_mouse_position())
 	$GunPivot.rotation = current_angle
 	$HeadSprite.rotation = current_angle
-	var min_angle = current_angle - angle_draft
-	var max_angle = current_angle + angle_draft
-	if ($Body.rotation - max_angle) > 0 || (min_angle - $Body.rotation) > 0:
-		$Body.rotation = current_angle
+	$Body.rotation = current_angle
 
 func movement():
 	var direction = Vector2(
