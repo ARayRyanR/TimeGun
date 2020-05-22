@@ -77,6 +77,9 @@ func _process(delta: float) -> void:
 	$GunPivot.rotation = current_angle
 	$Body.rotation = current_angle
 
+	# update hud
+	update_HUD_objectives()
+
 func movement():
 	var direction = Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
@@ -135,7 +138,11 @@ func update_health_bar():
 	$HealthBar/GreenBar.scale.x = current_health / max_health
 
 func update_HUD_mag():
-	$HUD/Magazine.text = str(current_mag) + " / " + str(mag_size)
+	$HUD/List/Magazine.text = str(current_mag) + " / " + str(mag_size)
+
+func update_HUD_objectives():
+	$HUD/List/Enemies.text = "Enemies : " + str(Data.objectives.enemies)
+	$HUD/List/Clocks.text = "Clocks : " + str(Data.objectives.clocks)
 
 # triggers when something hurts the player
 func _on_HurtBox_area_entered(area: Area2D) -> void:
