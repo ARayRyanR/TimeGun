@@ -69,7 +69,7 @@ var wall_tiles  = preload("res://assets/tilesets/wall.tres")
 var shadow_tiles= preload("res://assets/tilesets/occlusion.tres")
 var Player      = preload("res://src/actors/player/Player.tscn")
 var Swarm       = preload("res://src/actors/drones/DroneSwarm.tscn")
-var Pickup      = preload("res://src/objects/Pickup.tscn")
+var Pickup      = preload("res://src/objects/pickups/Heal.tscn")
 
 # @@@ RULE SETS DEFINITIONS @@@
 # the default map
