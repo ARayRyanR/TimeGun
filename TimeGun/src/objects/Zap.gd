@@ -4,7 +4,12 @@ export var zap_speed = 250.0
 export var _player_damage = 25.0
 
 func _ready() -> void:
-	$ZapSFX.play()
+	# create zap sfx
+	var sfx = AudioStreamPlayer.new()
+	sfx.stream = preload("res://assets/sfx/Laser_Shoot2.wav")
+	sfx.playing = true
+	sfx.connect("finished", sfx, "queue_free")
+	get_tree().current_scene.get_node("Sounds").add_child(sfx)
 
 func death():
 	$zap.play("death")
