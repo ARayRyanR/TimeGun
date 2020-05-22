@@ -62,6 +62,10 @@ func movement():
 
 func shoot():
 	if shoot_cooldown <= 0.0:
+		# arms animation
+		$Body/Arms.playing = true
+		$Body/Arms.frame = 0
+		
 		shoot_cooldown = (1.0/fire_rate)
 		var shot_angle = get_angle_to(get_global_mouse_position()) 
 		$GunPivot/Gun.shoot(shot_angle)

@@ -38,9 +38,9 @@ region = Rect2( 360, 0, 72, 91 )
 [sub_resource type="SpriteFrames" id=8]
 animations = [ {
 "frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
+"loop": false,
+"name": "shooting",
+"speed": 60.0
 } ]
 
 [node name="Player" type="KinematicBody2D"]
@@ -56,6 +56,7 @@ shape = SubResource( 1 )
 position = Vector2( 28, 0 )
 rotation = 1.5708
 frames = SubResource( 8 )
+animation = "shooting"
 
 [node name="BodySprite" type="Sprite" parent="Body"]
 rotation = 1.5708

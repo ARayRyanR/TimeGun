@@ -31,7 +31,3 @@ func shoot(shot_angle: float):
 	bullet.linear_velocity = Vector2(shot_speed, 0).rotated(angle)
 	bullet.rotation = angle
 	get_tree().current_scene.add_child(bullet)
-
-
-func _on_Gun_animation_finished() -> void:
-	playing = false
