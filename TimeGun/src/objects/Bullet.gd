@@ -2,6 +2,9 @@ extends RigidBody2D
 
 var damage
 
+func _ready() -> void:
+	$ShotSFX.play()
+
 # area detects world bodies and destroys bullet
 func _on_WorldDetector_body_entered(body: Node) -> void:
 	queue_free()

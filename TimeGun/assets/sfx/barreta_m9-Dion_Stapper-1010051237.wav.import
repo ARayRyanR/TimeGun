@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/barreta_m9-Dion_Stapper-1010051237.wav-0458183ac415972644da73de919202b4.sample"
+
+[deps]
+
+source_file="res://assets/sfx/barreta_m9-Dion_Stapper-1010051237.wav"
+dest_files=[ "res://.import/barreta_m9-Dion_Stapper-1010051237.wav-0458183ac415972644da73de919202b4.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

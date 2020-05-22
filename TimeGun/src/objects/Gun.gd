@@ -18,9 +18,6 @@ func shoot(shot_angle: float):
 	frame = 0
 	$Flash.frame = 0
 	
-	# play sound fx
-	$ShotSound.play()
-	
 	# calculate spread
 	var angle = shot_angle + spread * (randi()%200 - 100) / 100
 	
