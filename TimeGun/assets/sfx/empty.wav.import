@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Gun+Empty.wav-cd402853c9f59d081a3c2ff849f7736b.sample"
+path="res://.import/empty.wav-cb8034dbacdc0855b6db2fd11f8045d6.sample"
 
 [deps]
 
-source_file="res://assets/sfx/Gun+Empty.wav"
-dest_files=[ "res://.import/Gun+Empty.wav-cd402853c9f59d081a3c2ff849f7736b.sample" ]
+source_file="res://assets/sfx/empty.wav"
+dest_files=[ "res://.import/empty.wav-cb8034dbacdc0855b6db2fd11f8045d6.sample" ]
 
 [params]
 

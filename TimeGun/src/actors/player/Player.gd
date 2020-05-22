@@ -24,7 +24,7 @@ func _init() -> void:
 	# init player values
 	current_health = max_health
 	shoot_cooldown = 1.0 / fire_rate
-	current_mag = mag_size
+	current_mag = 0#mag_size
 
 func _ready() -> void:
 	# update hud
@@ -94,6 +94,11 @@ func shoot():
 		
 		var shot_angle = get_angle_to(get_global_mouse_position()) 
 		$GunPivot/Gun.shoot(shot_angle)
+	
+	if shoot_cooldown <= 0.0 && current_mag <= 0:
+		shoot_cooldown = 0.2
+		# play empty mag sfx
+		$EmptySFX.play()
 
 func death():
 	# notify game that player is dead

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/sprites/soldier/BODY0.png" type="Texture" id=1]
 [ext_resource path="res://src/objects/Gun.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/sprites/health-bar/bar_green.png" type="Texture" id=5]
 [ext_resource path="res://assets/sprites/health-bar/bar_red.png" type="Texture" id=6]
 [ext_resource path="res://assets/sprites/soldier/arms_shooting.png" type="Texture" id=7]
+[ext_resource path="res://assets/sfx/empty.wav" type="AudioStream" id=8]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 13.5915
@@ -107,4 +108,7 @@ margin_bottom = 14.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="EmptySFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
 [connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
