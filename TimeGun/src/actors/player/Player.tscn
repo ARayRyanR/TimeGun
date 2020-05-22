@@ -57,6 +57,8 @@ position = Vector2( 28, 0 )
 rotation = 1.5708
 frames = SubResource( 8 )
 animation = "shooting"
+frame = 5
+playing = true
 
 [node name="BodySprite" type="Sprite" parent="Body"]
 rotation = 1.5708

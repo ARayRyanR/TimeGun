@@ -15,8 +15,8 @@ func _init() -> void:
 
 # creates bullet at gun position with given angle
 func shoot(shot_angle: float):
-	playing = true
 	frame = 0
+	$Barrel/Flash.frame = 0
 	
 	# play sound fx
 	$ShotSound.play()
@@ -30,4 +30,4 @@ func shoot(shot_angle: float):
 	bullet.global_position = $Barrel.global_position
 	bullet.linear_velocity = Vector2(shot_speed, 0).rotated(angle)
 	bullet.rotation = angle
-	get_tree().current_scene.add_child(bullet)
+	get_tree().current_scene.get_node("Bullets").add_child(bullet)
