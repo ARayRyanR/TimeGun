@@ -3,7 +3,12 @@ extends RigidBody2D
 var damage
 
 func _ready() -> void:
-	$ShotSFX.play()
+	# create shot soundfx
+	var sfx = AudioStreamPlayer.new()
+	sfx.stream = preload("res://assets/sfx/shot.wav")
+	sfx.playing = true
+	sfx.connect("finished", sfx, "queue_free")
+	get_tree().current_scene.get_node("Sounds").add_child(sfx)
 
 # area detects world bodies and destroys bullet
 func _on_WorldDetector_body_entered(body: Node) -> void:
