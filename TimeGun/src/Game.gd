@@ -4,6 +4,8 @@ extends Layer
 var player = null
 var playing = false
 
+var Store = preload("res://src/Store.tscn")
+
 func _ready() -> void:
 	create_map("regular")
 	update_objectives()
@@ -16,9 +18,12 @@ func _process(delta: float) -> void:
 			advance_level()
 
 func advance_level():
+	# exit map
 	player  = null
 	playing = false
-	create_map("regular")
+
+	# enter store
+	get_tree().change_scene("res://src/Store.tscn")
 
 # Creates a valid map
 func create_map(ruleset: String):
