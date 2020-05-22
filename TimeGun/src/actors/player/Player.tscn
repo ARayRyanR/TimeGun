@@ -86,16 +86,25 @@ position = Vector2( -94.5062, -9.33218 )
 texture = ExtResource( 5 )
 centered = false
 
-[node name="Camera2D" type="Camera2D" parent="."]
-current = true
-limit_left = 0
-limit_top = 0
-smoothing_enabled = true
-
 [node name="HurtBox" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 524288
 
 [node name="BodyShape2" type="CollisionShape2D" parent="HurtBox"]
 shape = SubResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+limit_left = 0
+limit_top = 0
+smoothing_enabled = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Magazine" type="Label" parent="HUD"]
+margin_right = 40.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
