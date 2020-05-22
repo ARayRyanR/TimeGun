@@ -7,6 +7,7 @@ func _ready() -> void:
 	var sfx = AudioStreamPlayer.new()
 	sfx.stream = load("res://assets/sfx/shot.wav")
 	sfx.playing = true
+	sfx.connect("finished", sfx, "queue_free")
 	get_tree().current_scene.get_node("Sounds").add_child(sfx)
 
 # area detects world bodies and destroys bullet
