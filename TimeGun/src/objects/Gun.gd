@@ -16,7 +16,7 @@ func _init() -> void:
 # creates bullet at gun position with given angle
 func shoot(shot_angle: float):
 	frame = 0
-	$Barrel/Flash.frame = 0
+	$Flash.frame = 0
 	
 	# play sound fx
 	$ShotSound.play()

@@ -82,10 +82,10 @@ stream = ExtResource( 4 )
 volume_db = -15.0
 
 [node name="Barrel" type="Position2D" parent="."]
-position = Vector2( 6, -44 )
+position = Vector2( 5.99998, -50 )
 
-[node name="Flash" type="AnimatedSprite" parent="Barrel"]
-position = Vector2( -3.62396e-05, -10 )
+[node name="Flash" type="AnimatedSprite" parent="."]
+position = Vector2( 5.99995, -57 )
 frames = SubResource( 14 )
 frame = 5
 playing = true
