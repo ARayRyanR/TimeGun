@@ -74,6 +74,11 @@ func movement():
 
 func reload():
 	# reload logic
+	# play reload sfx
+	$ReloadSFX.play()
+	# play reload animation
+	# wait for animation to finish
+	yield(get_tree().create_timer(1.0), "timeout")
 	
 	# reset mag
 	current_mag = mag_size
