@@ -2,7 +2,12 @@ extends Node
 
 # @@@ DATA @@@
 var objectives = {
-	"enemies": 0
+	"enemies": 0,
+	"clocks": 0
+}
+
+var pickups = {
+	"heal": 50.0
 }
 
 var player = {

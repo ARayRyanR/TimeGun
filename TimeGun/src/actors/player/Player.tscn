@@ -103,9 +103,28 @@ shape = SubResource( 1 )
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="Magazine" type="Label" parent="HUD"]
-margin_right = 40.0
+[node name="List" type="VBoxContainer" parent="HUD"]
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Magazine" type="Label" parent="HUD/List"]
 margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Enemies" type="Label" parent="HUD/List"]
+margin_top = 18.0
+margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Clocks" type="Label" parent="HUD/List"]
+margin_top = 36.0
+margin_bottom = 50.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

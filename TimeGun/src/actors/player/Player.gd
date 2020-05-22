@@ -49,6 +49,10 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("reload"):
 		if state == FREE:
 			reload()
+	
+	# for debugging
+	if event.is_action_pressed("ui_cancel"):
+		current_health -= 20.0
 
 func _process(delta: float) -> void:
 	# death check
@@ -72,6 +76,9 @@ func _process(delta: float) -> void:
 	var current_angle = get_angle_to(get_global_mouse_position())
 	$GunPivot.rotation = current_angle
 	$Body.rotation = current_angle
+
+	# update hud
+	update_HUD_objectives()
 
 func movement():
 	var direction = Vector2(
@@ -97,6 +104,10 @@ func reload():
 	update_HUD_mag()
 	
 	state = FREE
+
+func heal(amount: float):
+	current_health = clamp(current_health + amount, 0.0, max_health)
+	update_health_bar()
 
 func shoot():
 	if shoot_cooldown <= 0.0 && current_mag > 0:
@@ -127,7 +138,11 @@ func update_health_bar():
 	$HealthBar/GreenBar.scale.x = current_health / max_health
 
 func update_HUD_mag():
-	$HUD/Magazine.text = str(current_mag) + " / " + str(mag_size)
+	$HUD/List/Magazine.text = str(current_mag) + " / " + str(mag_size)
+
+func update_HUD_objectives():
+	$HUD/List/Enemies.text = "Enemies : " + str(Data.objectives.enemies)
+	$HUD/List/Clocks.text = "Clocks : " + str(Data.objectives.clocks)
 
 # triggers when something hurts the player
 func _on_HurtBox_area_entered(area: Area2D) -> void:

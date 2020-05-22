@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 	if playing:
 		update_objectives()
 		
-		if Data.objectives.enemies <= 0:
+		if Data.objectives.enemies <= 0 && Data.objectives.clocks <= 0:
 			advance_level()
 
 func advance_level():
@@ -55,6 +55,11 @@ func update_objectives():
 	Data.objectives.enemies = 0
 	for enemy in $Enemies.get_children():
 		Data.objectives.enemies += 1
+	
+	# update clocks
+	Data.objectives.clocks = 0
+	for clock in $Clocks.get_children():
+		Data.objectives.clocks += 1
 
 ################################################################################
 #                    MAP RULESET
@@ -69,6 +74,8 @@ var wall_tiles  = preload("res://assets/tilesets/wall.tres")
 var shadow_tiles= preload("res://assets/tilesets/occlusion.tres")
 var Player      = preload("res://src/actors/player/Player.tscn")
 var Swarm       = preload("res://src/actors/drones/DroneSwarm.tscn")
+var Heal        = preload("res://src/objects/pickups/Heal.tscn")
+var Clock       = preload("res://src/objects/pickups/Clock.tscn")
 
 # @@@ RULE SETS DEFINITIONS @@@
 # the default map
@@ -116,6 +123,22 @@ func ruleset_regular():
 	var swarm = Swarm.instance()
 	swarm.global_position = pos
 	$Enemies.add_child(swarm)
+	
+	# Spawn some heals
+	var p = Heal.instance()
+	p.global_position = rule_get_empty_position()
+	$Walls.add_child(p)
+	p = Heal.instance()
+	p.global_position = rule_get_empty_position()
+	$Walls.add_child(p)
+	
+	# Spawn some clocks
+	var c = Clock.instance()
+	c.global_position = rule_get_empty_position()
+	$Clocks.add_child(c)
+	c = Clock.instance()
+	c.global_position = rule_get_empty_position()
+	$Clocks.add_child(c)
 	
 	# Create wall shadows
 	var shadow_maps = rule_create_occlusion(shadow_tiles) # get grid of shadows
