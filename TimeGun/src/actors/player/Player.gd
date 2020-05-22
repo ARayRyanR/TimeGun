@@ -49,7 +49,6 @@ func _process(delta: float) -> void:
 	# Sprite rotation
 	var current_angle = get_angle_to(get_global_mouse_position())
 	$GunPivot.rotation = current_angle
-	$HeadSprite.rotation = current_angle
 	$Body.rotation = current_angle
 
 func movement():
