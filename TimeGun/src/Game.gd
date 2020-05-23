@@ -14,6 +14,7 @@ func _process(delta: float) -> void:
 	if playing:
 		update_objectives()
 		
+		# use objectives data to advance level
 		if Data.objectives.enemies <= 0 && Data.objectives.clocks <= 0:
 			advance_level()
 
