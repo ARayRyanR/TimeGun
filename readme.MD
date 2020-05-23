@@ -86,6 +86,13 @@ and connect its finished signal to queue_free so that it deletes itself.
 
 ## IMPLEMENTATIONS
 
+### Enemies
+
+- improve drone swarm ai
+- improve drone swarm spawning (drones despawn sometimes on map gen)
+- add random movement to idle drones
+- add idle movement to drone swarm
+
 ### Map generation
 
 - add decoration layers
