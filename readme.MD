@@ -48,6 +48,11 @@ The objective system is managed via the Data singleton, a dictionary contains al
 such as "enemies", "pickups", etc. the Game node updates this data to keep objectives updated,
 we can then use this data to determine if the level is complete, to give according rewards, etc.
 
+# SOUND EFFECTS
+
+To create quick sound effects, the current approach is to create a new AudioStreamPlayer in the tree root,
+and connect its finished signal to queue_free so that it deletes itself.
+
 # TODO
 
 ## ASSETS
@@ -58,21 +63,40 @@ we can then use this data to determine if the level is complete, to give accordi
 - ui elements (money sprite)
 - upgrades sprites
 - store sprites
+- ground tile variations
 
 ### Animations
 
 - walking animation
+- death animation
 - drone death animation
 
 ### Sounds
 
 - shooting sfx
 - empty mag sfx
-- reload sfx  
-
+- reload sfx
 - drone death sfx
 
+### Music
+
+- background music
+- store music
+- title screen music
+
+## IMPLEMENTATIONS
+
+### Map generation
+
+- add decoration layers
+- add objective generation (maybe)
+
 ## DESIGN
+
+### Objectives
+
+- design objectives
+- decide on objective rewards
 
 ### Upgrades
 
