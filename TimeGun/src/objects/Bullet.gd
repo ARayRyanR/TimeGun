@@ -1,11 +1,13 @@
 extends RigidBody2D
 
+export (AudioStream)var shot_sfx
 var damage
 
 func _ready() -> void:
 	# create shot soundfx
 	var sfx = AudioStreamPlayer.new()
-	sfx.stream = preload("res://assets/sfx/shot.wav")
+	sfx.stream = shot_sfx
+	sfx.volume_db = -10.0
 	sfx.playing = true
 	sfx.connect("finished", sfx, "queue_free")
 	get_tree().current_scene.get_node("Sounds").add_child(sfx)

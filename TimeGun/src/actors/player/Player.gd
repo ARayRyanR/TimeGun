@@ -50,6 +50,11 @@ func _input(event: InputEvent) -> void:
 		if state == FREE:
 			reload()
 	
+	# Sprite rotation
+	var current_angle = get_angle_to(get_global_mouse_position())
+	$GunPivot.rotation = current_angle
+	$Body.rotation = current_angle
+	
 	# for debugging
 	if event.is_action_pressed("ui_cancel"):
 		current_health -= 20.0
@@ -71,12 +76,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("shoot"):
 		if state == FREE:
 			shoot()
-
-	# Sprite rotation
-	var current_angle = get_angle_to(get_global_mouse_position())
-	$GunPivot.rotation = current_angle
-	$Body.rotation = current_angle
-
+	
 	# update hud
 	update_HUD_objectives()
 
