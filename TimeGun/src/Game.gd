@@ -154,7 +154,7 @@ func ruleset_regular():
 	# create decors
 	rule_invert_grid()
 	rule_decay_grid(950)
-	rule_set_variations([])
+	rule_set_variations([[1, 500], [2, 500]])
 	var decor_map = rule_build_tilemap_from_ones(decor_tiles)
 	decor_map.name = "Decor"
 	$Floor.add_child(decor_map)
