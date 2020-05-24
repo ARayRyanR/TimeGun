@@ -47,7 +47,7 @@ func _input(event: InputEvent) -> void:
 	
 	# reloading
 	if event.is_action_pressed("reload"):
-		if state == FREE:
+		if state == FREE && current_mag < mag_size:
 			reload()
 	
 	# Sprite rotation
