@@ -1,10 +1,9 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://src/objects/Gun.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/soldier/gun1_shooting.png" type="Texture" id=2]
 [ext_resource path="res://assets/sprites/soldier/muzzleflash.png" type="Texture" id=3]
 [ext_resource path="res://assets/sprites/soldier/gun1_reload.png" type="Texture" id=4]
-[ext_resource path="res://src/objects/Bullet.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/sfx/empty.wav" type="AudioStream" id=6]
 [ext_resource path="res://assets/sfx/reload.wav" type="AudioStream" id=7]
 
@@ -227,7 +226,6 @@ rotation = 1.5708
 frames = SubResource( 7 )
 animation = "shooting"
 script = ExtResource( 1 )
-Bullet = ExtResource( 5 )
 
 [node name="Barrel" type="Position2D" parent="."]
 position = Vector2( 5.99998, -50 )

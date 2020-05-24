@@ -6,15 +6,13 @@ signal reload_started
 signal reload_finished
 signal mag_changed
 
-# @@@ EXPORT VARS @@@
-export (PackedScene)var Bullet
-
 # @@@ VALUES STORED IN DATA FILE @@@
 var shot_speed
 var base_damage
 var spread
 var mag_size
 var fire_rate
+var Bullet
 
 # @@@ ATTRIBUTES @@@
 var current_mag
@@ -34,6 +32,7 @@ func _init() -> void:
 	spread = Data.gun.spread
 	mag_size = Data.gun.mag_size
 	fire_rate = Data.gun.fire_rate
+	Bullet = Data.gun.bullet
 	
 	cooldown = 1.0 / fire_rate
 	current_mag = mag_size
