@@ -64,6 +64,20 @@ func _get_8neighbours(x: int, y: int):
 		values.append(layer_grid[x][y+1])
 	return values
 
+# returns a list of the values of the neighbours of a cell in the grid (4 neighbours)
+func _get_4neighbours(x: int, y: int):
+	var values = []
+	
+	if x > 0:
+		values.append(layer_grid[x-1][y])
+	if x < layer_gridx-1:
+		values.append(layer_grid[x+1][y])
+	if y > 0:
+		values.append(layer_grid[x][y-1])
+	if y < layer_gridy-1:
+		values.append(layer_grid[x][y+1])
+	return values
+
 # recursively floods neighbours, by setting their cell to 2
 func _flood_neighbours(x: int, y: int):
 	# check horizontally
