@@ -24,9 +24,6 @@ var layer_collisionmask = 1
 # tileset cell size
 var layer_cellx = 32
 var layer_celly = 32
-# tile flips
-var layer_tile_flipv = false
-var layer_tile_fliph = false
 # dictionary used for variation selection
 var layer_tile_variations = []
 
@@ -499,7 +496,7 @@ func rule_build_tilemap_from_ones(tileset: Resource) -> TileMap:
 					if randi()%1000<i[1]:
 						tile = i[0]
 				# add resulting tile to map
-				map.set_cell(x, y, tile, layer_tile_fliph, layer_tile_flipv)
+				map.set_cell(x, y, tile)
 	
 	# add map to layer
 	return map
