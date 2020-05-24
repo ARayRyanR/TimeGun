@@ -12,6 +12,7 @@ collision_layer = 4
 collision_mask = 0
 script = ExtResource( 2 )
 shot_sfx = ExtResource( 3 )
+volume_fix = -30.0
 
 [node name="WorldDetector" type="Area2D" parent="."]
 collision_layer = 0
