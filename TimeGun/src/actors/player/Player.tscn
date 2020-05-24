@@ -267,11 +267,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Magazine" type="Label" parent="HUD/List"]
+[node name="Mag" type="Label" parent="HUD/List"]
 margin_bottom = 14.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Enemies" type="Label" parent="HUD/List"]
 margin_top = 18.0
@@ -292,4 +289,8 @@ stream = ExtResource( 8 )
 
 [node name="ReloadSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )
+[connection signal="mag_changed" from="GunPivot/Gun" to="." method="_on_Gun_mag_changed"]
+[connection signal="reload_finished" from="GunPivot/Gun" to="." method="_on_Gun_reload_finished"]
+[connection signal="reload_started" from="GunPivot/Gun" to="." method="_on_Gun_reload_started"]
+[connection signal="shot_fired" from="GunPivot/Gun" to="." method="_on_Gun_shot_fired"]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]

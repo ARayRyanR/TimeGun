@@ -2,14 +2,10 @@ extends KinematicBody2D
 
 # @@@ VALUES LOADED FROM DATA FILE @@@
 var max_health
-var fire_rate
 var mov_speed
-var mag_size
 
 # @@@ PLAYER ATTRIBUTES @@@
 var current_health
-var shoot_cooldown
-var current_mag
 
 # @@@ MOVEMENT VARS @@@
 var velocity = Vector2.ZERO
@@ -24,18 +20,10 @@ var state = FREE
 func _init() -> void:
 	# Load values data object into object
 	max_health = Data.player.max_health
-	fire_rate  = Data.player.fire_rate
 	mov_speed  = Data.player.mov_speed
-	mag_size   = Data.player.mag_size
 
 	# init player values
 	current_health = max_health
-	shoot_cooldown = 1.0 / fire_rate
-	current_mag = mag_size
-
-func _ready() -> void:
-	# update hud
-	update_HUD_mag()
 
 func _input(event: InputEvent) -> void:
 	# zoom controls
@@ -45,9 +33,9 @@ func _input(event: InputEvent) -> void:
 		if $Camera2D.zoom.x > 0.5:
 			$Camera2D.zoom -= Vector2(0.5, 0.5)
 	
-	# reloading
+	# attempt to reload gun
 	if event.is_action_pressed("reload"):
-		if state == FREE && current_mag < mag_size:
+		if state == FREE:
 			reload()
 	
 	# Sprite rotation
@@ -64,15 +52,12 @@ func _process(delta: float) -> void:
 	if current_health <= 0.0:
 		death()
 	
-	# decrease cooldown
-	shoot_cooldown -= delta
-	
 	# movement
 	movement()
 	
 	velocity = move_and_slide(velocity)
 	
-	# shooting (pressed makes it automatic)
+	# attempt to shoot gun
 	if Input.is_action_pressed("shoot"):
 		if state == FREE:
 			shoot()
@@ -88,51 +73,9 @@ func movement():
 	
 	velocity = direction.normalized() * mov_speed
 
-func reload():
-	state = RELOADING
-	
-	# also reload from gun
-	$GunPivot/Gun.reload()
-	
-	# reload logic
-	# play reload sfx
-	$ReloadSFX.play()
-	# play reload animation
-	$Body/Arms.play("reloading")
-	# wait for animation to finish
-	yield($Body/Arms, "animation_finished")
-	
-	# reset mag
-	current_mag = mag_size
-	# update hud
-	update_HUD_mag()
-	
-	state = FREE
-
 func heal(amount: float):
 	current_health = clamp(current_health + amount, 0.0, max_health)
 	update_health_bar()
-
-func shoot():
-	if shoot_cooldown <= 0.0 && current_mag > 0:
-		# arms animation
-		$Body/Arms.play("shooting")
-		$Body/Arms.frame = 0
-		
-		# reset cooldown
-		shoot_cooldown = (1.0/fire_rate)
-		# decrease magazine
-		current_mag -= 1
-		# update hud
-		update_HUD_mag()
-		
-		var shot_angle = get_angle_to(get_global_mouse_position()) 
-		$GunPivot/Gun.shoot(shot_angle)
-	
-	if shoot_cooldown <= 0.0 && current_mag <= 0:
-		shoot_cooldown = 0.2
-		# play empty mag sfx
-		$EmptySFX.play()
 
 func death():
 	# notify game that player is dead
@@ -141,9 +84,6 @@ func death():
 
 func update_health_bar():
 	$HealthBar/GreenBar.scale.x = current_health / max_health
-
-func update_HUD_mag():
-	$HUD/List/Magazine.text = str(current_mag) + " / " + str(mag_size)
 
 func update_HUD_objectives():
 	$HUD/List/Enemies.text = "Enemies : " + str(Data.objectives.enemies)
@@ -154,3 +94,27 @@ func _on_HurtBox_area_entered(area: Area2D) -> void:
 	print("player damaged")
 	current_health -= area.get_parent()._player_damage
 	update_health_bar()
+
+# @@@ GUN METHODS @@@
+func reload():
+	# attempt to reload gun
+	$GunPivot/Gun.reload()
+
+func shoot():
+	# attempt to shoot in player direction
+	var shot_angle = get_angle_to(get_global_mouse_position())
+	$GunPivot/Gun.shoot(shot_angle)
+
+func _on_Gun_reload_finished() -> void:
+	$Body/Arms.play("idle")
+
+func _on_Gun_reload_started() -> void:
+	$Body/Arms.play("reloading")
+
+func _on_Gun_shot_fired() -> void:
+	$Body/Arms.play("shooting")
+	$Body/Arms.frame = 0
+
+func _on_Gun_mag_changed(amount: int) -> void:
+	# update player hud
+	$HUD/List/Mag.text = "mag : " + str(amount)
