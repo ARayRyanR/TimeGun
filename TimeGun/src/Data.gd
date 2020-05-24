@@ -13,16 +13,16 @@ var pickups = {
 var player = {
 	# Main player attributes
 	"max_health": 100.0,
-	"fire_rate":  7.0,
 	"mov_speed":  300.0,
-	"mag_size": 45
 }
 
 var gun = {
 	# Main gun attributes
-	"shot_speed": 1000.0,
+	"shot_speed":  1000.0,
 	"base_damage": 10.0,
-	"spread": PI/32,
+	"fire_rate":   8.0,
+	"mag_size":    30,
+	"spread":      PI/32,
 	
 	# projectile shot
 	"bullet": preload("res://src/objects/Bullet.tscn")

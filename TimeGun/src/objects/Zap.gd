@@ -8,6 +8,7 @@ func _ready() -> void:
 	var sfx = AudioStreamPlayer.new()
 	sfx.stream = preload("res://assets/sfx/Laser_Shoot2.wav")
 	sfx.playing = true
+	sfx.volume_db = -15
 	sfx.connect("finished", sfx, "queue_free")
 	get_tree().current_scene.get_node("Sounds").add_child(sfx)
 

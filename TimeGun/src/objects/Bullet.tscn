@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/sprites/soldier/bullet.png" type="Texture" id=1]
 [ext_resource path="res://src/objects/Bullet.gd" type="Script" id=2]
+[ext_resource path="res://assets/sfx/shot.wav" type="AudioStream" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 4.5767
@@ -10,6 +11,8 @@ radius = 4.5767
 collision_layer = 4
 collision_mask = 0
 script = ExtResource( 2 )
+shot_sfx = ExtResource( 3 )
+volume_fix = -30.0
 
 [node name="WorldDetector" type="Area2D" parent="."]
 collision_layer = 0

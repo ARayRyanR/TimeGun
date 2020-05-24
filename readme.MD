@@ -57,6 +57,11 @@ and connect its finished signal to queue_free so that it deletes itself.
 
 ## ASSETS
 
+### Art
+
+- game title screen
+- game death screen
+
 ### Sprites
 
 - ammo/mag sprite
@@ -64,6 +69,7 @@ and connect its finished signal to queue_free so that it deletes itself.
 - upgrades sprites
 - store sprites
 - ground tile variations
+- game icon
 
 ### Animations
 
