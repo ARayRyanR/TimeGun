@@ -162,6 +162,23 @@ func rule_ones_grid():
 	# return generated grid
 	layer_grid = new_grid
 
+# inverts all values of grid
+func rule_invert_grid():
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if layer_grid[x][y] == 0:
+				layer_grid[x][y] = 1
+			else:
+				layer_grid[x][y] = 0
+
+# diminishes the number of ones in a random way, based in bias
+func rule_decay_grid(bias: int):
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if layer_grid[x][y] == 1:
+				if randi()%1000 < bias:
+					layer_grid[x][y] = 0
+
 # adds a border of 1's to current grid
 func rule_border_ones():
 	for x in range(layer_gridx):
