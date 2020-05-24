@@ -243,3 +243,4 @@ stream = ExtResource( 7 )
 
 [node name="ClickSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
+volume_db = -10.0
