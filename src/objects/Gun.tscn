@@ -1,0 +1,86 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://src/objects/Gun.gd" type="Script" id=1]
+[ext_resource path="res://assets/sprites/soldier/gun1_shooting.png" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/soldier/muzzleflash.png" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 72, 91 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 72, 0, 72, 91 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 144, 0, 72, 91 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 216, 0, 72, 91 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 288, 0, 72, 91 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 360, 0, 72, 91 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": false,
+"name": "shooting",
+"speed": 30.0
+} ]
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 25, 26 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 3 )
+region = Rect2( 25, 0, 25, 26 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 3 )
+region = Rect2( 50, 0, 25, 26 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 3 )
+region = Rect2( 75, 0, 25, 26 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
+region = Rect2( 100, 0, 25, 26 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 3 )
+region = Rect2( 125, 0, 25, 26 )
+
+[sub_resource type="SpriteFrames" id=14]
+animations = [ {
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ],
+"loop": false,
+"name": "default",
+"speed": 30.0
+} ]
+
+[node name="Gun" type="AnimatedSprite"]
+rotation = 1.5708
+frames = SubResource( 7 )
+animation = "shooting"
+frame = 5
+playing = true
+script = ExtResource( 1 )
+
+[node name="Barrel" type="Position2D" parent="."]
+position = Vector2( 5.99998, -50 )
+
+[node name="Flash" type="AnimatedSprite" parent="."]
+position = Vector2( 5.99995, -57 )
+frames = SubResource( 14 )
+frame = 5
+playing = true
