@@ -13,8 +13,14 @@ func _init() -> void:
 	spread = Data.gun.spread
 	Bullet = Data.gun.bullet
 
+func reload():
+	# trigger reload anomation
+	play("reloading")
+
 # creates bullet at gun position with given angle
 func shoot(shot_angle: float):
+	# reset shot animation
+	play("shooting")
 	frame = 0
 	$Flash.frame = 0
 	

@@ -91,12 +91,16 @@ func movement():
 func reload():
 	state = RELOADING
 	
+	# also reload from gun
+	$GunPivot/Gun.reload()
+	
 	# reload logic
 	# play reload sfx
 	$ReloadSFX.play()
 	# play reload animation
+	$Body/Arms.play("reloading")
 	# wait for animation to finish
-	yield(get_tree().create_timer(1.0), "timeout")
+	yield($Body/Arms, "animation_finished")
 	
 	# reset mag
 	current_mag = mag_size
@@ -112,6 +116,7 @@ func heal(amount: float):
 func shoot():
 	if shoot_cooldown <= 0.0 && current_mag > 0:
 		# arms animation
+		$Body/Arms.play("shooting")
 		$Body/Arms.frame = 0
 		
 		# reset cooldown
