@@ -86,10 +86,10 @@ var Clock       = preload("res://src/objects/pickups/Clock.tscn")
 # the default map
 func ruleset_regular():
 	# Create map grid
-	rule_grid_size(MAP_WIDTH, MAP_HEIGHT)
+	rule_set_grid_size(MAP_WIDTH, MAP_HEIGHT)
 	
 	# Create floor tilemap
-	rule_ones_grid()
+	rule_fill_grid(1)
 	rule_set_tilesize(64, 64)
 	rule_set_variations([])
 	var floor_map = rule_build_tilemap_from_ones(grass_tiles)
@@ -97,7 +97,7 @@ func ruleset_regular():
 	$Floor.add_child(floor_map)
 	
 	# Create walls tilemap
-	rule_zero_grid()
+	rule_fill_grid(0)
 	rule_random_ones(450)
 	rule_border_ones()
 	rule_smooth()

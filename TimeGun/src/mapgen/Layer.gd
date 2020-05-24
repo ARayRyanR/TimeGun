@@ -33,7 +33,7 @@ var layer_tile_variations = []
 ################################################################################
 # @@@ UTILITY METHODS @@@
 # returns a grid of size (x, y) full of zeros
-func _gen_grid_zeros(x: int, y:int):
+func _gen_grid_zeros(x: int, y:int) -> Array:
 	var grid = []
 	for _x in range(x):
 		var col = []
@@ -43,7 +43,7 @@ func _gen_grid_zeros(x: int, y:int):
 	return grid
 
 # returns a list of the values of the neighbours of a cell in the grid (8 neighbours)
-func _get_8neighbours(x: int, y: int):
+func _get_8neighbours(x: int, y: int) -> Array:
 	var values = []
 	
 	if x > 0:
@@ -65,7 +65,7 @@ func _get_8neighbours(x: int, y: int):
 	return values
 
 # returns a list of the values of the neighbours of a cell in the grid (4 neighbours)
-func _get_4neighbours(x: int, y: int):
+func _get_4neighbours(x: int, y: int) -> Array:
 	var values = []
 	
 	if x > 0:
@@ -78,8 +78,8 @@ func _get_4neighbours(x: int, y: int):
 		values.append(layer_grid[x][y+1])
 	return values
 
-# recursively floods neighbours, by setting their cell to 2
-func _flood_neighbours(x: int, y: int):
+# recursively floods neighbours, by setting their cell to 2 (modifies grid)
+func _flood_neighbours(x: int, y: int) -> void:
 	# check horizontally
 	if x > 0 && layer_grid[x-1][y] == 0:
 		# flood cell
@@ -118,8 +118,29 @@ func _get_tile(position: Vector2) -> Array:
 	return [x, y]
 
 ################################################################################
-# @@@ RULE DEFINITIONS @@@
-# @@@ GRID RELATED RULES @@@
+# @@@@@@@@@@@@@@@@@@@@@@ RULE DEFINITIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+################################################################################
+
+# @@@ POSITION RELATED RULES @@@
+# sets layer position attributes
+func rule_set_pos(posx: int, posy: int) -> void:
+	layer_posx = posx
+	layer_posy = posy
+
+# centers layer according to current grid size and cell size
+func rule_center_layer():
+	# map size in pixels
+	var map_width  = layer_gridx * layer_cellx
+	var map_height = layer_gridy * layer_celly
+	
+	layer_posx = - map_width  / 2
+	layer_posy = - map_height / 2
+
+# @@@ GRID ACCESSING RULES @@@
+# returns the current grid
+func fule_get_grid() -> Array:
+	return layer_grid
+
 # returns a random global position that has a 0 on current grid
 func rule_get_empty_position() -> Vector2:
 	var x = 0
@@ -134,7 +155,7 @@ func rule_get_empty_position() -> Vector2:
 	return pos
 
 # returns a random tile thas has a 0 in current grid
-func rule_get_empty_tile():
+func rule_get_empty_tile() -> Array:
 	var x = 0
 	var y = 0
 	while true:
@@ -145,39 +166,39 @@ func rule_get_empty_tile():
 	
 	return [x, y]
 
+# returns a random tile that has a 1 in current grid
+func rule_get_occupied_tile() -> Array:
+	var x = 0
+	var y = 0
+	while true:
+		x = randi()%layer_gridx
+		y = randi()%layer_gridy
+		if layer_grid[x][y] == 1:
+			break
+	
+	return [x, y]
+
+# @@@ GRID MODIFYING RULES @@@
 # sets layer map size
-func rule_grid_size(x: int, y :int):
+func rule_set_grid_size(x: int, y :int) -> void:
 	layer_gridx = x
 	layer_gridy = y
 
 # sets grid to given array
-func rule_set_grid(grid: Array):
+func rule_set_grid(grid: Array) -> void:
 	layer_grid = grid
 
-# sets grid to zeros
-func rule_zero_grid():
-	var new_grid = []
-	for _x in range(layer_gridx):
+# sets grid to given value
+func rule_fill_grid(v: int) -> void:
+	layer_grid = []
+	for x in range(layer_gridx):
 		var col = []
-		for _y in range(layer_gridy):
-			col.append(0)
-		new_grid.append(col)
-	# return generated grid
-	layer_grid = new_grid
-
-# sets grid to ones
-func rule_ones_grid():
-	var new_grid = []
-	for _x in range(layer_gridx):
-		var col = []
-		for _y in range(layer_gridy):
-			col.append(1)
-		new_grid.append(col)
-	# return generated grid
-	layer_grid = new_grid
+		for y in range(layer_gridy):
+			col.append(v)
+		layer_grid.append(col)
 
 # inverts all values of grid
-func rule_invert_grid():
+func rule_invert_grid() -> void:
 	for x in range(layer_gridx):
 		for y in range(layer_gridy):
 			if layer_grid[x][y] == 0:
@@ -186,7 +207,7 @@ func rule_invert_grid():
 				layer_grid[x][y] = 0
 
 # diminishes the number of ones in a random way, based in bias
-func rule_decay_grid(bias: int):
+func rule_decay_grid(bias: int) -> void:
 	for x in range(layer_gridx):
 		for y in range(layer_gridy):
 			if layer_grid[x][y] == 1:
@@ -194,7 +215,7 @@ func rule_decay_grid(bias: int):
 					layer_grid[x][y] = 0
 
 # adds a border of 1's to current grid
-func rule_border_ones():
+func rule_border_ones() -> void:
 	for x in range(layer_gridx):
 		layer_grid[x][0] = 1
 		layer_grid[x][layer_gridy-1] = 1
@@ -203,7 +224,7 @@ func rule_border_ones():
 		layer_grid[layer_gridx-1][y] = 1
 
 # uses bias to generate random 1's in grid (more bias = more 1's)
-func rule_random_ones(bias: int):
+func rule_random_ones(bias: int) -> void:
 	# loop through grid
 	for x in range(layer_gridx):
 		for y in range(layer_gridy):
@@ -211,7 +232,7 @@ func rule_random_ones(bias: int):
 				layer_grid[x][y] = 1
 
 # uses B678/S345678 to smooth current grid one step (DOESN'T GENERATE BORDERS)
-func rule_smooth():
+func rule_smooth() -> void:
 	var copy = layer_grid
 
 	# loop through all cells
@@ -241,7 +262,7 @@ func rule_smooth():
 	layer_grid = copy
 
 # fills little corners
-func rule_smooth_corners():
+func rule_smooth_corners() -> void:
 	var copy = layer_grid
 	
 	# loop through all 2 x 2 sections
@@ -260,6 +281,44 @@ func rule_smooth_corners():
 	
 	# set new grid
 	layer_grid = copy
+
+# fills all disconnected areas with ones
+func rule_flood_ones():
+	# find random zero cell
+	var x = 0
+	var y = 0
+	while true:
+		x = randi()%layer_gridx
+		y = randi()%layer_gridy
+		if layer_grid[x][y] == 0:
+			break
+	
+	# values of 2 in grid indicate a flooded cell
+	layer_grid[x][y] = 2 # flood starting point
+	_flood_neighbours(x, y)   # recursively flood empty neighbours
+	
+	# set final grid
+	for x in range(layer_gridx):
+		for y in range(layer_gridy):
+			if layer_grid[x][y] != 2:
+				# fill non-flooded cells
+				layer_grid[x][y] = 1
+			else:
+				# unflood flooded cells
+				layer_grid[x][y] = 0
+
+# @@@ TILEMAP CREATION METHODS @@@ (dont modify grid)
+# set size of cells used for tile creation
+func rule_set_tilesize(sizex: int, sizey: int):
+	layer_cellx = sizex
+	layer_celly = sizey
+
+# set the variations used in created tilemaps
+func rule_set_variations(variations: Array):
+	# an array of variations is passed for example :
+	# [[1, 50], [2, 100], [3, 500]]
+	# tile 1 has 50/1000 chance, tile 2 has 100/1000 chance etc.
+	layer_tile_variations = variations
 
 # 'Casts' the shadow of current ones in grid (returns array of created tilemaps)
 func rule_create_occlusion(tileset: Resource) -> Array:
@@ -418,64 +477,8 @@ func rule_create_occlusion(tileset: Resource) -> Array:
 	# return all the created maps
 	return maps
 
-# fills are disconnected areas with ones
-func rule_flood_ones():
-	# find random zero cell
-	var x = 0
-	var y = 0
-	while true:
-		x = randi()%layer_gridx
-		y = randi()%layer_gridy
-		if layer_grid[x][y] == 0:
-			break
-	
-	# values of 2 in grid indicate a flooded cell
-	layer_grid[x][y] = 2 # flood starting point
-	_flood_neighbours(x, y)   # recursively flood empty neighbours
-	
-	# set final grid
-	for x in range(layer_gridx):
-		for y in range(layer_gridy):
-			if layer_grid[x][y] != 2:
-				# fill non-flooded cells
-				layer_grid[x][y] = 1
-			else:
-				# unflood flooded cells
-				layer_grid[x][y] = 0
-
-
-# @@@ POSITION RELATED RULES @@@
-# sets layer position attributes
-func rule_set_pos(posx: int, posy: int):
-	layer_posx = posx
-	layer_posy = posy
-
-# centers layer according to current grid size and cell size
-func rule_center_layer():
-	# map size in pixels
-	var map_width  = layer_gridx * layer_cellx
-	var map_height = layer_gridy * layer_celly
-	
-	layer_posx = - map_width  / 2
-	layer_posy = - map_height / 2
-
-# @@@ TILESET RELATED RULES @@@
-func rule_set_tilesize(sizex: int, sizey: int):
-	layer_cellx = sizex
-	layer_celly = sizey
-
-# sets the flip boolenas for tile creation
-func rule_set_tile_flipv(flip: bool):
-	layer_tile_flipv = flip
-func rule_set_tile_fliph(flip: bool):
-	layer_tile_fliph = flip
-
-func rule_set_variations(variations: Array):
-	layer_tile_variations = variations
-
-# @@@ TILEMAP CREATION RULES @@@
-# creates a tilemap and adds it to the layer
-# adds tiles for each one in layer_grid
+# creates a tilemap and returns it
+# adds tiles for each one in layer_grid using the tileset given
 func rule_build_tilemap_from_ones(tileset: Resource) -> TileMap:
 	# setup tilemap
 	var map = TileMap.new()
@@ -483,7 +486,6 @@ func rule_build_tilemap_from_ones(tileset: Resource) -> TileMap:
 	map.global_position = Vector2(layer_posx, layer_posy)
 	map.cell_size = Vector2(layer_cellx, layer_celly)
 	map.collision_mask = layer_collisionmask
-	
 	
 	# draw tiles
 	var tile_variations = layer_tile_variations
@@ -503,8 +505,11 @@ func rule_build_tilemap_from_ones(tileset: Resource) -> TileMap:
 	return map
 
 # @@@ MAP CHECKS @@@
+# this methods modify the layer_valid property by checking a given condition
+
 # ensures a given amount of area is 0's
 func rule_check_area(bias: int):
+	# calculate map total area
 	var area  = layer_gridx * layer_gridy
 	
 	# count 0's
@@ -517,7 +522,7 @@ func rule_check_area(bias: int):
 	# make check
 	var percentage = 1000 * zeros/area
 	if percentage < bias:
-		print("failed area check : " + str(percentage) + "/" + str(bias))
+		print("> failed area check : " + str(percentage) + "/" + str(bias))
 		layer_valid = false
 	else:
-		print("passed area check : " + str(percentage) + "/" + str(bias))
+		print("> passed area check : " + str(percentage) + "/" + str(bias))
